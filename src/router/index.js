@@ -28,7 +28,7 @@ const routes = [
         path: 'alert',
         name: 'AlertList',
         component: () => import('@/views/alert/AlertList.vue'),
-        meta: { title: '智能预警', icon: 'WarningFilled' },
+        meta: { title: '预警管理', icon: 'WarningFilled' },
       },
       {
         path: 'consultation',

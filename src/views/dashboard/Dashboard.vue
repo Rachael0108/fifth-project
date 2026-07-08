@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="dashboard">
     <div class="welcome-banner">
       <div class="welcome-text">
@@ -10,20 +10,33 @@
       </el-button>
     </div>
 
-    <div class="stat-grid">
-      <el-card v-for="item in stats" :key="item.label" shadow="never" class="stat-card">
-        <div class="stat-icon">{{ item.icon }}</div>
-        <div class="stat-value" :style="{ color: item.color }">{{ item.value }}</div>
-        <div class="stat-label">{{ item.label }}</div>
-        <div class="stat-trend" :style="{ color: item.trend > 0 ? '#38a169' : '#e53e3e' }">
-          {{ item.trend > 0 ? '↑' : '↓' }} {{ Math.abs(item.trend) }}% 较上月
+    <div class="stat-grid dash-stat-grid">
+      <el-card
+        v-for="item in stats"
+        :key="item.label"
+        shadow="never"
+        class="stat-card dash-stat-card"
+        :style="{ '--stat-accent': item.color, '--stat-icon-bg': item.iconBg }"
+      >
+        <div class="dash-stat-row">
+          <div class="dash-stat-info">
+            <div class="stat-value" :style="{ color: item.color }">{{ item.value }}</div>
+            <div class="stat-label">{{ item.label }}</div>
+            <div class="stat-trend" :style="{ color: item.trend > 0 ? 'var(--color-success)' : item.trend < 0 ? 'var(--color-danger)' : 'var(--text-muted)' }">
+              <template v-if="item.trend !== 0">{{ item.trend > 0 ? '↑' : '↓' }} {{ Math.abs(item.trend) }}% 较上月</template>
+              <template v-else>与上月持平</template>
+            </div>
+          </div>
+          <div class="stat-icon-wrap">
+            <el-icon :size="20"><component :is="item.icon" /></el-icon>
+          </div>
         </div>
       </el-card>
     </div>
 
-    <el-row :gutter="20">
-      <el-col :xs="24" :sm="24" :md="16">
-        <el-card shadow="never" class="section-card">
+    <el-row :gutter="16" class="overview-row">
+      <el-col :xs="24" :sm="24" :md="16" class="overview-col">
+        <el-card shadow="never" class="section-card overview-card">
           <template #header><span>管理指标总览</span></template>
           <div class="bar-chart">
             <div v-for="bar in barData" :key="bar.label" class="bar-row">
@@ -37,38 +50,40 @@
         </el-card>
       </el-col>
 
-      <el-col :xs="24" :sm="24" :md="8">
-        <el-card shadow="never" class="section-card">
+      <el-col :xs="24" :sm="24" :md="8" class="overview-col">
+        <el-card shadow="never" class="section-card overview-card">
           <template #header><span>近期预警</span></template>
+          <div class="alert-list-body">
           <div v-for="row in pendingAlerts" :key="row.id" class="alert-row">
             <span class="alert-dot" :style="{ background: alertTypeMap[row.type]?.color }" />
             <div class="alert-row-info">
               <span class="alert-row-name">{{ row.patientName }}</span>
               <span class="alert-row-desc">{{ row.content }}</span>
             </div>
-            <el-tag :type="alertTypeMap[row.type]?.type" size="small" round>
+            <el-tag :type="alertTypeMap[row.type]?.type" size="small">
               {{ alertTypeMap[row.type]?.label }}
             </el-tag>
           </div>
           <el-empty v-if="!pendingAlerts.length" description="暂无预警" />
+          </div>
         </el-card>
       </el-col>
     </el-row>
 
     <el-card shadow="never" class="section-card">
       <template #header><span>预警记录</span></template>
-      <el-table :data="alertLog" stripe size="small">
-        <el-table-column prop="patientName" label="患者" width="110" />
-        <el-table-column label="类型" width="110">
+      <el-table :data="alertLog" size="small">
+        <el-table-column prop="patientName" label="患者" min-width="110" />
+        <el-table-column label="类型" min-width="110">
           <template #default="{ row }">
-            <el-tag :type="alertTypeMap[row.type]?.type" size="small" round>
+            <el-tag :type="alertTypeMap[row.type]?.type" size="small">
               {{ alertTypeMap[row.type]?.label }}
             </el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="content" label="内容" min-width="240" />
-        <el-table-column prop="time" label="时间" width="150" />
-        <el-table-column label="操作" width="80">
+        <el-table-column prop="time" label="时间" min-width="150" />
+        <el-table-column label="操作" min-width="80">
           <template #default="{ row }">
             <el-button text size="small" @click="handleCall(row)">已沟通</el-button>
           </template>
@@ -79,8 +94,8 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import { WarningFilled } from '@element-plus/icons-vue'
+import { ref } from 'vue'
+import { WarningFilled, User, House, FirstAidKit, Plus, DataAnalysis } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores/user'
 import { ElMessage } from 'element-plus'
 
@@ -88,34 +103,27 @@ const userStore = useUserStore()
 const today = new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })
 
 const alertTypeMap = {
-  overdue: { label: '逾期未复诊', type: 'danger', color: '#e53e3e' },
-  compliance: { label: '依从性下降', type: 'warning', color: '#d69e2e' },
-  abnormal: { label: '检查结果异常', type: 'danger', color: '#e53e3e' },
-  lost: { label: '即将失访', type: 'info', color: '#718096' },
+  overdue: { label: '逾期未复诊', type: 'danger', color: 'var(--color-danger)' },
+  compliance: { label: '依从性下降', type: 'warning', color: 'var(--color-warning)' },
+  abnormal: { label: '检查结果异常', type: 'danger', color: 'var(--color-danger)' },
+  lost: { label: '即将失访', type: 'info', color: 'var(--color-info)' },
 }
 
 const stats = ref([
-  { icon: '👥', label: '在管患者总数', value: 128, color: '#0066cc', trend: 3 },
-  { icon: '🏥', label: '住院患者', value: 32, color: '#e53e3e', trend: -2 },
-  { icon: '💊', label: '服药依从率', value: '86%', color: '#38a169', trend: 2 },
-  { icon: '⚠️', label: '待处理预警', value: 12, color: '#d69e2e', trend: -8 },
-  { icon: '➕', label: '今日新增患者', value: 3, color: '#0066cc', trend: 0 },
-  { icon: '📊', label: '管理完成率', value: '94%', color: '#38a169', trend: 1 },
+  { icon: 'User', label: '在管患者总数', value: 128, color: '#0D9488', iconBg: '#CCFBF1', trend: 3 },
+  { icon: 'House', label: '住院患者', value: 32, color: '#F43F5E', iconBg: '#FFE4E6', trend: -2 },
+  { icon: 'FirstAidKit', label: '服药依从率', value: '86%', color: '#10B981', iconBg: '#D1FAE5', trend: 2 },
+  { icon: 'WarningFilled', label: '待处理预警', value: 12, color: '#F59E0B', iconBg: '#FEF3C7', trend: -8 },
+  { icon: 'Plus', label: '今日新增患者', value: 3, color: '#6366F1', iconBg: '#E0E7FF', trend: 0 },
+  { icon: 'DataAnalysis', label: '管理完成率', value: '94%', color: '#8B5CF6', iconBg: '#EDE9FE', trend: 1 },
 ])
 
 const barData = ref([
-  { label: '住院患者', count: 32, percent: 25, color: '#e53e3e' },
-  { label: '门诊随访', count: 45, percent: 35, color: '#d69e2e' },
-  { label: '居家服药', count: 28, percent: 22, color: '#38a169' },
-  { label: '已结案', count: 10, percent: 8, color: '#718096' },
-  { label: '失访', count: 3, percent: 2, color: '#a0aec0' },
-])
-
-const alertStats = ref([
-  { label: '逾期未复诊', count: 4, color: '#e53e3e', total: 12 },
-  { label: '依从性下降', count: 4, color: '#d69e2e', total: 12 },
-  { label: '检查结果异常', count: 2, color: '#e53e3e', total: 12 },
-  { label: '即将失访', count: 2, color: '#718096', total: 12 },
+  { label: '住院患者', count: 32, percent: 25, color: '#F43F5E' },
+  { label: '门诊随访', count: 45, percent: 35, color: '#F59E0B' },
+  { label: '居家服药', count: 28, percent: 22, color: '#10B981' },
+  { label: '已结案', count: 10, percent: 8, color: '#64748B' },
+  { label: '失访', count: 3, percent: 2, color: '#CBD5E1' },
 ])
 
 const pendingAlerts = ref([
@@ -139,37 +147,118 @@ function handleCall(row) {
 
 <style scoped>
 .welcome-banner {
-  background: linear-gradient(135deg, #0066cc, #3399ff);
+  background: #fff;
+  border: 1px solid var(--border-light);
   border-radius: var(--radius-card);
-  padding: 24px 28px;
+  padding: 20px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
-  color: #fff;
 }
 .welcome-text h2 {
   font-size: 20px;
   font-weight: 600;
+  color: var(--text-primary);
   margin-bottom: 6px;
 }
 .welcome-text p {
   font-size: 14px;
-  opacity: 0.9;
+  color: var(--text-secondary);
 }
 .welcome-text strong {
+  color: var(--color-danger);
   font-weight: 700;
 }
+
+.dash-stat-grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.dash-stat-card :deep(.el-card__body) {
+  padding: 16px 18px;
+}
+
+.dash-stat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.dash-stat-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.dash-stat-card .stat-icon-wrap {
+  margin: 0;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+}
+
+.dash-stat-card .stat-value {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.dash-stat-card .stat-label {
+  margin-top: 2px;
+  font-size: 12px;
+}
+
 .stat-trend {
   font-size: 12px;
   margin-top: 4px;
-  font-weight: 500;
 }
-.bar-chart {
+
+@media (max-width: 992px) {
+  .dash-stat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .dash-stat-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.overview-row {
+  align-items: stretch;
+}
+.overview-col {
+  display: flex;
+  margin-bottom: 16px;
+}
+.overview-card {
+  flex: 1;
+  width: 100%;
+  margin-bottom: 0 !important;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+}
+.overview-card :deep(.el-card__body) {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.bar-chart {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
   padding: 4px 0;
+}
+.alert-list-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 .bar-row {
   display: flex;
@@ -179,25 +268,26 @@ function handleCall(row) {
 .bar-label {
   width: 70px;
   font-size: 13px;
-  color: var(--text-secondary, #2c5282);
+  color: var(--text-secondary);
   flex-shrink: 0;
 }
 .bar-track {
   flex: 1;
-  height: 14px;
-  background: #e0f2fe;
-  border-radius: 7px;
+  height: 12px;
+  background: #F1F5F9;
+  border-radius: 6px;
   overflow: hidden;
 }
 .bar-fill {
   height: 100%;
-  border-radius: 7px;
-  transition: width 0.6s ease;
+  border-radius: 6px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 }
 .bar-value {
   width: 40px;
   font-size: 13px;
-  color: var(--text-secondary, #2c5282);
+  color: var(--text-secondary);
   text-align: right;
 }
 .alert-row {
@@ -207,7 +297,7 @@ function handleCall(row) {
   padding: 10px 0;
 }
 .alert-row + .alert-row {
-  border-top: 1px solid #c8dce8;
+  border-top: 1px solid var(--border-light);
 }
 .alert-dot {
   width: 8px;
@@ -224,12 +314,12 @@ function handleCall(row) {
   display: block;
   font-size: 14px;
   font-weight: 600;
-  color: var(--text-primary, #0a2d4d);
+  color: var(--text-primary);
 }
 .alert-row-desc {
   display: block;
   font-size: 12px;
-  color: var(--text-muted, #4a7a9a);
+  color: var(--text-muted);
   margin-top: 2px;
   overflow: hidden;
   text-overflow: ellipsis;

@@ -8,15 +8,15 @@
     </div>
     <div class="navbar-right">
       <el-badge :value="unreadAlerts" :hidden="!unreadAlerts" class="mr-12">
-        <el-button text :icon="Bell" style="font-size: 18px" @click="$router.push('/alert')" />
+        <el-button text :icon="Bell" class="nav-icon-btn" @click="$router.push('/alert')" />
       </el-badge>
       <el-dropdown trigger="click">
         <span class="user-info">
-          <el-avatar :size="30" style="background: linear-gradient(135deg, #0066cc, #3399ff)">
+          <el-avatar :size="34" class="user-avatar">
             {{ userStore.user.realName?.charAt(0) || '管' }}
           </el-avatar>
           <span class="user-name">{{ userStore.user.realName || '管理员' }}</span>
-          <el-icon><ArrowDown /></el-icon>
+          <el-icon class="arrow-icon"><ArrowDown /></el-icon>
         </span>
         <template #dropdown>
           <el-dropdown-menu>
@@ -54,29 +54,62 @@ function handleLogout() {
   align-items: center;
   justify-content: space-between;
   padding: 0 24px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-  height: var(--navbar-height, 50px);
+  border-bottom: 1px solid var(--border-light);
+  height: var(--navbar-height);
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
+
 .navbar-right {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
-.mr-12 { margin-right: 12px; }
+
+.mr-12 { margin-right: 4px; }
+
+.nav-icon-btn {
+  font-size: 20px;
+  color: var(--text-secondary);
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.nav-icon-btn:hover {
+  background: #F1F5F9;
+  color: var(--el-color-primary);
+}
+
 .user-info {
   display: flex;
   align-items: center;
   gap: 8px;
   cursor: pointer;
-  padding: 2px 8px;
-  border-radius: 6px;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
   transition: background 0.2s;
 }
+
 .user-info:hover {
-  background: #f0f7ff;
+  background: #F5F6F8;
 }
+
+.user-avatar {
+  background: var(--el-color-primary);
+  font-size: 13px;
+}
+
 .user-name {
   font-size: 14px;
-  color: var(--text-regular, #1a3a5c);
+  color: var(--text-regular);
+  font-weight: 600;
+}
+
+.arrow-icon {
+  font-size: 12px;
+  color: var(--text-muted);
 }
 </style>

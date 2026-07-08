@@ -1,57 +1,69 @@
-<template>
+﻿<template>
   <div class="medication">
     <div class="page-header">
       <h2>服药复诊</h2>
       <el-date-picker v-model="currentDate" type="date" placeholder="选择日期" style="width: 160px" />
     </div>
 
-    <div class="stat-grid">
-      <el-card v-for="s in medStats" :key="s.label" shadow="never" class="stat-card">
-        <div class="stat-icon">{{ s.icon }}</div>
-        <div class="stat-value" :style="{ color: s.color }">{{ s.value }}</div>
-        <div class="stat-label">{{ s.label }}</div>
+    <div class="stat-grid med-stat-grid">
+      <el-card
+        v-for="s in medStats"
+        :key="s.label"
+        shadow="never"
+        class="stat-card med-stat-card"
+        :style="{ '--stat-accent': s.color, '--stat-icon-bg': s.iconBg }"
+      >
+        <div class="med-stat-row">
+          <div class="stat-icon-wrap">
+            <el-icon :size="20"><component :is="s.icon" /></el-icon>
+          </div>
+          <div class="med-stat-info">
+            <div class="stat-value" :style="{ color: s.color }">{{ s.value }}</div>
+            <div class="stat-label">{{ s.label }}</div>
+          </div>
+        </div>
       </el-card>
     </div>
 
     <el-tabs v-model="activeTab" class="med-tabs">
       <el-tab-pane label="今日打卡" name="daily">
-        <el-row :gutter="20">
-          <el-col :xs="24" :sm="24" :md="12">
-            <el-card shadow="never" class="section-card">
+        <el-row :gutter="20" class="panel-row">
+          <el-col :xs="24" :sm="24" :md="12" class="panel-col">
+            <el-card shadow="never" class="section-card panel-card">
               <template #header><span>今日服药打卡</span></template>
-              <el-table :data="dailyMeds" stripe size="small">
-                <el-table-column label="姓名" width="100">
+              <el-table :data="dailyMeds" size="small">
+                <el-table-column label="姓名" min-width="100">
                   <template #default="{ row }">
-                    <span style="color: var(--text-primary, #0a2d4d); font-weight: 500">{{ row.name }}</span>
+                    <span class="cell-name">{{ row.name }}</span>
                   </template>
                 </el-table-column>
-                <el-table-column prop="medication" label="药品" width="120" />
-                <el-table-column prop="scheduledTime" label="计划时间" width="100" />
-                <el-table-column label="状态" width="90">
+                <el-table-column prop="medication" label="药品" min-width="120" />
+                <el-table-column prop="scheduledTime" label="计划时间" min-width="100" />
+                <el-table-column label="状态" min-width="90">
                   <template #default="{ row }">
-                    <el-tag :type="row.status === 'done' ? 'success' : 'danger'" size="small" round>
+                    <span class="status-dot" :class="row.status === 'done' ? 'is-done' : 'is-pending'">
                       {{ row.status === 'done' ? '已打卡' : '未打卡' }}
-                    </el-tag>
+                    </span>
                   </template>
                 </el-table-column>
-                <el-table-column prop="actualTime" label="实际打卡" width="100" />
+                <el-table-column prop="actualTime" label="实际打卡" min-width="100" />
               </el-table>
             </el-card>
           </el-col>
-          <el-col :xs="24" :sm="24" :md="12">
-            <el-card shadow="never" class="section-card">
+          <el-col :xs="24" :sm="24" :md="12" class="panel-col">
+            <el-card shadow="never" class="section-card panel-card">
               <template #header><span>HIV 免疫功能追踪</span></template>
               <div class="immunity-chart">
                 <div class="chart-row">
                   <span class="chart-label">CD4 计数</span>
                   <div class="mini-chart">
-                    <div v-for="(v, i) in cd4Data" :key="i" class="mini-bar" :style="{ height: v + 'px', background: '#0066cc' }" />
+                    <div v-for="(v, i) in cd4Data" :key="i" class="mini-bar mini-bar--cd4" :style="{ height: v + 'px' }" />
                   </div>
                 </div>
                 <div class="chart-row">
                   <span class="chart-label">病毒载量</span>
                   <div class="mini-chart">
-                    <div v-for="(v, i) in viralData" :key="i" class="mini-bar" :style="{ height: v + 'px', background: '#0066cc' }" />
+                    <div v-for="(v, i) in viralData" :key="i" class="mini-bar mini-bar--viral" :style="{ height: v + 'px' }" />
                   </div>
                 </div>
                 <div class="chart-months">
@@ -61,13 +73,13 @@
             </el-card>
           </el-col>
         </el-row>
-        <el-row :gutter="20">
-          <el-col :xs="24" :sm="24" :md="12">
-            <el-card shadow="never" class="section-card">
+        <el-row :gutter="20" class="panel-row">
+          <el-col :xs="24" :sm="24" :md="12" class="panel-col">
+            <el-card shadow="never" class="section-card panel-card">
               <template #header><span>漏服提醒与补救指导</span></template>
               <div v-for="item in missedDoses" :key="item.id" class="missed-item">
                 <div class="missed-header">
-                  <el-tag size="small" type="danger" round>漏服</el-tag>
+                  <el-tag size="small" type="danger">漏服</el-tag>
                   <strong style="color: var(--text-primary)">{{ item.name }}</strong>
                   <span style="color: var(--text-placeholder); font-size: 12px">{{ item.time }}</span>
                 </div>
@@ -76,25 +88,25 @@
               <el-empty v-if="missedDoses.length === 0" description="今日无漏服记录" :image-size="60" />
             </el-card>
           </el-col>
-          <el-col :xs="24" :sm="24" :md="12">
-            <el-card shadow="never" class="section-card">
+          <el-col :xs="24" :sm="24" :md="12" class="panel-col">
+            <el-card shadow="never" class="section-card panel-card">
               <template #header>
                 <span>症状自报</span>
                 <el-button text type="primary" :icon="Plus" @click="showSymptomDialog = true">上报症状</el-button>
               </template>
-              <el-table :data="symptomReports" stripe size="small">
-                <el-table-column label="患者" prop="patientName" width="80" />
+              <el-table :data="symptomReports" size="small">
+                <el-table-column label="患者" prop="patientName" min-width="80" />
                 <el-table-column label="症状" min-width="150">
                   <template #default="{ row }">
                     <el-tag v-for="s in row.symptoms" :key="s" :type="s === '呼吸困难' ? 'danger' : ''" size="small" style="margin-right: 3px">{{ s }}</el-tag>
                   </template>
                 </el-table-column>
-                <el-table-column prop="severity" label="程度" width="60">
+                <el-table-column prop="severity" label="程度" min-width="60">
                   <template #default="{ row }">
                     <el-tag :type="row.severity === '重度' ? 'danger' : row.severity === '中度' ? 'warning' : 'success'" size="small">{{ row.severity }}</el-tag>
                   </template>
                 </el-table-column>
-                <el-table-column label="处理" width="70">
+                <el-table-column label="处理" min-width="70">
                   <template #default="{ row }">
                     <el-tag v-if="row.alert" type="danger" size="small">已预警</el-tag>
                     <span v-else style="color: var(--text-placeholder)">正常</span>
@@ -112,12 +124,12 @@
             <span>服药计划</span>
             <el-button text type="primary" :icon="Plus" @click="showPlanDrawer = true">新增服药计划</el-button>
           </template>
-          <el-table :data="medicationPlans" stripe size="small">
-            <el-table-column prop="patientName" label="患者" width="100" />
-            <el-table-column prop="medication" label="药品" width="120" />
-            <el-table-column prop="dosage" label="用量" width="80" />
-            <el-table-column prop="frequency" label="频率" width="100" />
-            <el-table-column prop="time" label="时间" width="100" />
+          <el-table :data="medicationPlans" size="small">
+            <el-table-column prop="patientName" label="患者" min-width="100" />
+            <el-table-column prop="medication" label="药品" min-width="120" />
+            <el-table-column prop="dosage" label="用量" min-width="80" />
+            <el-table-column prop="frequency" label="频率" min-width="100" />
+            <el-table-column prop="time" label="时间" min-width="100" />
             <el-table-column prop="note" label="备注" min-width="160" />
           </el-table>
         </el-card>
@@ -129,23 +141,23 @@
             <span>复查计划</span>
             <el-button text type="primary" :icon="Plus" @click="showFollowupDrawer = true">新增复查计划</el-button>
           </template>
-          <el-table :data="followupPlans" stripe size="small">
-            <el-table-column prop="patientName" label="患者" width="100" />
-            <el-table-column prop="examType" label="复查项目" width="140" />
-            <el-table-column prop="lastDate" label="上次日期" width="110" />
-            <el-table-column prop="nextDate" label="下次日期" width="110">
+          <el-table :data="followupPlans" size="small">
+            <el-table-column prop="patientName" label="患者" min-width="100" />
+            <el-table-column prop="examType" label="复查项目" min-width="140" />
+            <el-table-column prop="lastDate" label="上次日期" min-width="110" />
+            <el-table-column prop="nextDate" label="下次日期" min-width="110">
               <template #default="{ row }">
                 <span :style="{ color: row.overdue ? 'var(--el-color-danger)' : 'var(--text-primary)', fontWeight: row.overdue ? 600 : 400 }">{{ row.nextDate }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="状态" width="80">
+            <el-table-column label="状态" min-width="80">
               <template #default="{ row }">
                 <el-tag :type="row.overdue ? 'danger' : row.done ? 'success' : 'warning'" size="small">
                   {{ row.overdue ? '逾期' : row.done ? '已完成' : '待复查' }}
                 </el-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="doctor" label="医生" width="80" />
+            <el-table-column prop="doctor" label="医生" min-width="80" />
           </el-table>
         </el-card>
       </el-tab-pane>
@@ -153,16 +165,16 @@
       <el-tab-pane label="检查结果" name="results">
         <el-card shadow="never" class="section-card">
           <template #header><span>检查结果查询</span></template>
-          <el-table :data="labResults" stripe size="small">
-            <el-table-column prop="patientName" label="患者" width="90" />
-            <el-table-column prop="date" label="日期" width="90" />
-            <el-table-column prop="testName" label="检查项目" width="140" />
-            <el-table-column prop="result" label="结果" width="90">
+          <el-table :data="labResults" size="small">
+            <el-table-column prop="patientName" label="患者" min-width="90" />
+            <el-table-column prop="date" label="日期" min-width="90" />
+            <el-table-column prop="testName" label="检查项目" min-width="140" />
+            <el-table-column prop="result" label="结果" min-width="90">
               <template #default="{ row }">
                 <span :style="{ color: row.normal ? 'var(--el-color-success)' : 'var(--el-color-danger)', fontWeight: 600 }">{{ row.result }}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="reference" label="参考范围" width="120" />
+            <el-table-column prop="reference" label="参考范围" min-width="120" />
             <el-table-column label="解读" min-width="240">
               <template #default="{ row }">
                 <span style="color: var(--text-secondary)">{{ row.interpretation }}</span>
@@ -282,17 +294,17 @@
 
 <script setup>
 import { ref } from 'vue'
-import { Plus } from '@element-plus/icons-vue'
+import { Plus, FirstAidKit, CircleCheck, Clock, WarningFilled } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 
 const currentDate = ref(new Date())
 const activeTab = ref('daily')
 
 const medStats = ref([
-  { icon: '💊', label: '在管服药患者', value: 78, color: '#0066cc' },
-  { icon: '✅', label: '今日已打卡', value: 66, color: '#38a169' },
-  { icon: '⏳', label: '今日未打卡', value: 12, color: '#d69e2e' },
-  { icon: '❌', label: '连续漏服预警', value: 3, color: '#e53e3e' },
+  { icon: 'FirstAidKit', label: '在管服药患者', value: 78, color: '#0D9488', iconBg: '#CCFBF1' },
+  { icon: 'CircleCheck', label: '今日已打卡', value: 66, color: '#10B981', iconBg: '#D1FAE5' },
+  { icon: 'Clock', label: '今日未打卡', value: 12, color: '#F59E0B', iconBg: '#FEF3C7' },
+  { icon: 'WarningFilled', label: '连续漏服预警', value: 3, color: '#F43F5E', iconBg: '#FFE4E6' },
 ])
 
 const dailyMeds = ref([
@@ -414,72 +426,174 @@ function submitSymptom() {
 </script>
 
 <style scoped>
+/* 统计卡片 — 左图标右数值 */
+.med-stat-grid {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.med-stat-card :deep(.el-card__body) {
+  padding: 16px 18px;
+}
+
+.med-stat-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.med-stat-card .stat-icon-wrap {
+  margin: 0;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+}
+
+.med-stat-info {
+  min-width: 0;
+}
+
+.med-stat-card .stat-value {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.med-stat-card .stat-label {
+  margin-top: 2px;
+  font-size: 12px;
+}
+
+/* 等高面板 */
+.panel-row {
+  align-items: stretch;
+}
+
+.panel-col {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.panel-card {
+  flex: 1;
+  width: 100%;
+  margin-bottom: 0 !important;
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-card :deep(.el-card__body) {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow-x: auto;
+}
+
+.panel-card :deep(.el-card__header) {
+  flex-shrink: 0;
+}
+
 .med-tabs {
   margin-top: -4px;
 }
+
 .med-tabs :deep(.el-tabs__header) {
   margin-bottom: 16px;
 }
-.med-tabs :deep(.el-tabs__item.is-active) {
-  color: var(--el-color-primary);
-  font-weight: 600;
-}
-.med-tabs :deep(.el-tabs__active-bar) {
-  background: var(--el-color-primary);
-}
+
 .immunity-chart {
-  padding: 8px 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 16px 20px 20px;
 }
+
 .chart-row {
   display: flex;
   align-items: flex-end;
   gap: 12px;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
+
+.chart-row:last-of-type {
+  margin-bottom: 12px;
+}
+
 .chart-label {
-  width: 70px;
+  width: 68px;
   font-size: 13px;
-  color: var(--text-primary, #0a2d4d);
+  color: var(--text-secondary);
   font-weight: 500;
   flex-shrink: 0;
 }
+
 .mini-chart {
   flex: 1;
   display: flex;
   align-items: flex-end;
-  gap: 6px;
-  height: 140px;
+  gap: 8px;
+  height: 120px;
 }
+
 .mini-bar {
   flex: 1;
   border-radius: 4px 4px 0 0;
   min-height: 4px;
   transition: height 0.4s ease;
 }
+
+.mini-bar--cd4 {
+  background: #0D9488;
+  opacity: 0.85;
+}
+
+.mini-bar--viral {
+  background: #94A3B8;
+}
+
 .chart-months {
   display: flex;
   justify-content: space-between;
-  padding-left: 82px;
+  padding-left: 80px;
   font-size: 12px;
-  color: var(--text-placeholder, #7a9ab5);
+  color: var(--text-muted);
 }
+
 .missed-item {
-  border-left: 3px solid #e53e3e;
-  padding: 10px 14px;
-  margin-bottom: 10px;
-  background: #fff5f5;
-  border-radius: 6px;
+  padding: 12px 14px;
+  margin: 0 20px 10px;
+  background: #FEF2F2;
+  border-radius: var(--radius-sm);
+  border: 1px solid #FECACA;
 }
+
+.missed-item:first-child {
+  margin-top: 16px;
+}
+
+.missed-item:last-child {
+  margin-bottom: 16px;
+}
+
 .missed-header {
   display: flex;
   align-items: center;
   gap: 8px;
   margin-bottom: 6px;
 }
+
 .missed-guidance {
   font-size: 13px;
-  color: var(--text-secondary, #2c5282);
+  color: var(--text-secondary);
   line-height: 1.6;
   margin: 0;
+}
+
+@media (max-width: 992px) {
+  .med-stat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 </style>

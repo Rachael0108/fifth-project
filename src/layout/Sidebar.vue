@@ -9,38 +9,18 @@
     </div>
     <el-menu
       :default-active="route.path"
-      background-color="var(--blue-deep)"
-      text-color="#99b8d4"
-      active-text-color="#ffffff"
+      background-color="transparent"
+      text-color="var(--sidebar-text)"
+      active-text-color="var(--sidebar-text-active)"
       router
     >
-      <el-menu-item index="/dashboard">
-        <el-icon><DataBoard /></el-icon>
-        <template #title>运营看板</template>
-      </el-menu-item>
-      <el-menu-item index="/patient">
-        <el-icon><User /></el-icon>
-        <template #title>患者档案</template>
-      </el-menu-item>
-      <el-menu-item index="/alert">
-        <el-icon><WarningFilled /></el-icon>
-        <template #title>智能预警</template>
-      </el-menu-item>
-      <el-menu-item index="/consultation">
-        <el-icon><ChatDotRound /></el-icon>
-        <template #title>线上问诊</template>
-      </el-menu-item>
-      <el-menu-item index="/assessment">
-        <el-icon><List /></el-icon>
-        <template #title>评估模块</template>
-      </el-menu-item>
-      <el-menu-item index="/medication">
-        <el-icon><AlarmClock /></el-icon>
-        <template #title>服药复诊</template>
-      </el-menu-item>
-      <el-menu-item index="/education">
-        <el-icon><Reading /></el-icon>
-        <template #title>健康教育</template>
+      <el-menu-item
+        v-for="item in menuItems"
+        :key="item.index"
+        :index="item.index"
+      >
+        <el-icon><component :is="item.icon" /></el-icon>
+        <template #title>{{ item.title }}</template>
       </el-menu-item>
     </el-menu>
   </div>
@@ -51,13 +31,24 @@ import { useRoute } from 'vue-router'
 import logoImg from '@/assets/logo.png'
 
 const route = useRoute()
+
+const menuItems = [
+  { index: '/dashboard', icon: 'DataBoard', title: '运营看板' },
+  { index: '/patient', icon: 'User', title: '患者档案' },
+  { index: '/alert', icon: 'WarningFilled', title: '预警管理' },
+  { index: '/consultation', icon: 'ChatDotRound', title: '线上问诊' },
+  { index: '/assessment', icon: 'List', title: '评估模块' },
+  { index: '/medication', icon: 'AlarmClock', title: '服药复诊' },
+  { index: '/education', icon: 'Reading', title: '健康教育' },
+]
 </script>
 
 <style scoped>
 .sidebar-wrapper {
   width: var(--sidebar-width);
   height: 100vh;
-  background: var(--blue-deep);
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
   display: flex;
   flex-direction: column;
   position: fixed;
@@ -65,52 +56,71 @@ const route = useRoute()
   top: 0;
   z-index: 100;
 }
+
 .logo {
-  height: 60px;
+  height: var(--navbar-height);
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
-  border-bottom: 1px solid #0052a3;
-  padding: 0 8px;
+  gap: 10px;
+  border-bottom: 1px solid var(--sidebar-border);
+  padding: 0 16px;
 }
+
 .logo-img {
   height: 28px;
   width: auto;
   flex-shrink: 0;
 }
+
 .logo-text {
   display: flex;
   flex-direction: column;
-  line-height: 1.3;
+  line-height: 1.35;
+  min-width: 0;
 }
+
 .logo-title {
-  color: #e0f2fe;
-  font-size: 14px;
-  font-weight: 700;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
 .logo-sub {
-  color: #99b8d4;
-  font-size: 12px;
-  font-weight: 500;
+  color: var(--text-muted);
+  font-size: 11px;
 }
+
 .el-menu {
   border-right: none;
   flex: 1;
   overflow-y: auto;
-  padding: 6px 0;
+  padding: 8px;
 }
+
 .el-menu .el-menu-item {
-  height: 46px;
-  line-height: 46px;
-  margin: 2px 10px;
-  border-radius: 8px;
+  height: 42px;
+  line-height: 42px;
+  margin: 2px 0;
+  border-radius: var(--radius-sm);
   width: auto;
+  font-size: 14px;
+  transition: background 0.2s;
 }
-.el-menu .el-menu-item.is-active {
-  background: var(--blue-mid) !important;
-}
+
 .el-menu .el-menu-item:hover {
-  background: var(--blue-mid) !important;
+  background: var(--sidebar-hover) !important;
+}
+
+.el-menu .el-menu-item.is-active {
+  background: var(--sidebar-active) !important;
+  color: var(--sidebar-text-active) !important;
+  font-weight: 500;
+}
+
+.el-menu .el-menu-item .el-icon {
+  font-size: 17px;
 }
 </style>

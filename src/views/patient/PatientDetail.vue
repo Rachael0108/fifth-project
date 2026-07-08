@@ -1,19 +1,19 @@
-<template>
+﻿<template>
   <div class="patient-detail" v-loading="loading">
     <div class="page-header">
       <el-button text :icon="ArrowLeft" @click="goBack">返回列表</el-button>
       <el-button type="primary" size="small" :icon="Edit">编辑档案</el-button>
     </div>
 
-    <el-row :gutter="20">
-      <el-col :xs="24" :sm="24" :md="8">
-        <el-card shadow="never" class="section-card">
+    <el-row :gutter="20" class="detail-row">
+      <el-col :xs="24" :sm="24" :md="8" class="detail-col">
+        <el-card shadow="never" class="section-card profile-card">
           <template #header>
             <div class="profile-header">
-              <el-avatar :size="48" style="background: #0066cc; font-size: 20px">张</el-avatar>
+              <el-avatar :size="48" class="profile-avatar">陈</el-avatar>
               <div>
                 <div class="profile-name">陈建国</div>
-                <div class="profile-id">住院号: 20240001</div>
+                <div class="profile-id">病历号: 20240001</div>
               </div>
             </div>
           </template>
@@ -27,33 +27,35 @@
             <div class="info-item"><label>下次随访</label><span>2026-07-15</span></div>
             <div class="info-item">
               <label>管理状态</label>
-              <span><el-tag size="small" round type="danger">在治</el-tag></span>
+              <span><el-tag size="small" type="danger" style="color: #f00;">在治</el-tag></span>
             </div>
           </div>
         </el-card>
 
-        <el-card shadow="never" class="section-card">
+        <el-card shadow="never" class="section-card contacts-card">
           <template #header>
             <span>密切接触者</span>
-            <el-button text size="small">管理</el-button>
+            <el-button text type="primary" size="small">管理</el-button>
           </template>
-          <div v-for="c in contacts" :key="c.name" class="contact-row">
-            <el-avatar :size="28">{{ c.name.charAt(1) }}</el-avatar>
-            <div class="contact-info">
-              <span>{{ c.name }}</span>
-              <span class="contact-rel">{{ c.relation }}</span>
+          <div class="contacts-body">
+            <div v-for="c in contacts" :key="c.name" class="contact-row">
+              <el-avatar :size="28">{{ c.name.charAt(1) }}</el-avatar>
+              <div class="contact-info">
+                <span>{{ c.name }}</span>
+                <span class="contact-rel">{{ c.relation }}</span>
+              </div>
+              <el-tag
+                :type="c.screeningStatus === 'done' ? 'success' : 'warning'"
+                size="small"
+              >
+                {{ c.screeningStatus === 'done' ? '已筛查' : '待筛查' }}
+              </el-tag>
             </div>
-            <el-tag
-              :type="c.screeningStatus === 'done' ? 'success' : 'warning'"
-              size="small" round
-            >
-              {{ c.screeningStatus === 'done' ? '已筛查' : '待筛查' }}
-            </el-tag>
           </div>
         </el-card>
       </el-col>
 
-      <el-col :xs="24" :sm="24" :md="16">
+      <el-col :xs="24" :sm="24" :md="16" class="detail-col">
         <el-card shadow="never" class="section-card">
           <template #header><span>治疗时间轴</span></template>
           <el-timeline>
@@ -71,16 +73,16 @@
           </el-timeline>
         </el-card>
 
-        <el-card shadow="never" class="section-card">
+        <el-card shadow="never" class="section-card lab-card">
           <template #header><span>历次检查结果</span></template>
-          <el-table :data="labResults" stripe size="small">
-            <el-table-column prop="date" label="日期" width="110" />
-            <el-table-column prop="item" label="检查项目" width="130" />
-            <el-table-column label="结果" width="90">
+          <el-table :data="labResults" size="small">
+            <el-table-column prop="date" label="日期" min-width="110" />
+            <el-table-column prop="item" label="检查项目" min-width="130" />
+            <el-table-column label="结果" min-width="90">
               <template #default="{ row }">
                 <el-tag
                   :type="row.result === '阴性' || row.result === '正常' ? 'success' : 'danger'"
-                  size="small" round
+                  size="small"
                 >
                   {{ row.result }}
                 </el-tag>
@@ -128,6 +130,40 @@ function goBack() {
 </script>
 
 <style scoped>
+.detail-row {
+  align-items: stretch;
+}
+
+.detail-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-card {
+  flex-shrink: 0;
+}
+
+.contacts-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0 !important;
+}
+
+.contacts-card :deep(.el-card__body) {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.contacts-body {
+  flex: 1;
+}
+
+.lab-card {
+  margin-bottom: 0 !important;
+}
+
 .profile-header {
   display: flex;
   align-items: center;
@@ -166,7 +202,7 @@ function goBack() {
   padding: 8px 0;
 }
 .contact-row + .contact-row {
-  border-top: 1px solid #c8dce8;
+  border-top: 1px solid var(--border-light);
 }
 .contact-info {
   flex: 1;
@@ -187,7 +223,11 @@ function goBack() {
 }
 .tl-desc {
   font-size: 13px;
-  color: var(--text-muted, #4a7a9a);
+  color: var(--text-muted);
   margin-top: 4px;
+}
+.profile-avatar {
+  background: #546E7A;
+  font-size: 20px;
 }
 </style>

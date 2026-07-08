@@ -1,14 +1,21 @@
-<template>
+﻿<template>
   <div class="patient-list">
     <div class="page-header">
       <h2>患者档案</h2>
       <div class="header-actions">
         <el-input
-          v-model="searchKeyword"
-          placeholder="搜索姓名 / 住院号"
+          v-model="searchName"
+          placeholder="姓名"
           clearable
           :prefix-icon="Search"
-          style="width: 220px"
+          class="search-input"
+        />
+        <el-input
+          v-model="searchRecordNo"
+          placeholder="病历号"
+          clearable
+          :prefix-icon="Document"
+          class="search-input"
         />
         <el-select v-model="filterCategory" placeholder="患者分类" clearable style="width: 150px">
           <el-option label="全部患者" value="" />
@@ -22,15 +29,21 @@
     </div>
 
     <div class="stat-grid">
-      <el-card v-for="s in patientStats" :key="s.label" shadow="never" class="stat-card">
+      <el-card
+        v-for="s in patientStats"
+        :key="s.label"
+        shadow="never"
+        class="stat-card"
+        :style="{ '--stat-accent': s.color, '--stat-icon-bg': s.iconBg }"
+      >
         <div class="stat-value" :style="{ color: s.color }">{{ s.count }}</div>
         <div class="stat-label">{{ s.label }}</div>
       </el-card>
     </div>
 
     <el-card shadow="never" class="section-card">
-      <el-table :data="filteredPatients" stripe size="small">
-        <el-table-column label="姓名" width="180">
+      <el-table :data="filteredPatients" size="small">
+        <el-table-column label="姓名" min-width="180">
           <template #default="{ row }">
             <div class="name-cell">
               <el-avatar :size="28" :style="{ background: row.avatarColor }">{{ row.name.charAt(0) }}</el-avatar>
@@ -38,20 +51,20 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="hospitalId" label="住院号" width="120" />
-        <el-table-column prop="gender" label="性别" width="60" />
-        <el-table-column prop="age" label="年龄" width="60" />
+        <el-table-column prop="hospitalId" label="病历号" min-width="120" />
+        <el-table-column prop="gender" label="性别" min-width="60" />
+        <el-table-column prop="age" label="年龄" min-width="60" />
         <el-table-column prop="diagnosis" label="诊断" min-width="160" />
-        <el-table-column prop="nextFollowUp" label="下次随访" width="110" />
-        <el-table-column prop="nurse" label="责任护士" width="100" />
-        <el-table-column label="分类" width="90">
+        <el-table-column prop="nextFollowUp" label="下次随访" min-width="110" />
+        <el-table-column prop="nurse" label="责任护士" min-width="100" />
+        <el-table-column label="分类" min-width="90">
           <template #default="{ row }">
-            <el-tag :type="categoryMap[row.category]?.tag" size="small" round>{{ categoryMap[row.category]?.label }}</el-tag>
+            <el-tag :type="categoryMap[row.category]?.tag" size="small">{{ categoryMap[row.category]?.label }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="80" fixed="right">
           <template #default="{ row }">
-            <el-button text size="small" @click="$router.push(`/patient/${row.id}`)">详情</el-button>
+            <el-button text type="primary" size="small" @click="$router.push(`/patient/${row.id}`)">详情</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -61,27 +74,28 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { Search, Plus } from '@element-plus/icons-vue'
+import { Search, Document, Refresh } from '@element-plus/icons-vue'
 
-const searchKeyword = ref('')
+const searchName = ref('')
+const searchRecordNo = ref('')
 const filterCategory = ref('')
 
 const patientStats = ref([
-  { key: 'inpatient', label: '住院患者', count: 32, color: '#e53e3e' },
-  { key: 'outpatient', label: '门诊随访', count: 45, color: '#d69e2e' },
-  { key: 'home', label: '居家服药', count: 28, color: '#38a169' },
-  { key: 'closed', label: '已结案', count: 10, color: '#718096' },
+  { key: 'inpatient', label: '住院患者', count: 32, color: '#F43F5E', iconBg: '#FFE4E6' },
+  { key: 'outpatient', label: '门诊随访', count: 45, color: '#F59E0B', iconBg: '#FEF3C7' },
+  { key: 'home', label: '居家服药', count: 28, color: '#10B981', iconBg: '#D1FAE5' },
+  { key: 'closed', label: '已结案', count: 10, color: '#64748B', iconBg: '#F1F5F9' },
 ])
 
 const patients = ref([
-  { id: 1, name: '陈建国', hospitalId: '20240001', gender: '男', age: 45, diagnosis: '肺结核（初治）', category: 'inpatient', nextFollowUp: '2026-07-15', nurse: '王护士', avatarColor: '#e53e3e' },
-  { id: 2, name: '王丽华', hospitalId: '20240002', gender: '女', age: 32, diagnosis: 'HIV 感染', category: 'outpatient', nextFollowUp: '2026-07-20', nurse: '张护士', avatarColor: '#d69e2e' },
-  { id: 3, name: '刘志强', hospitalId: '20240003', gender: '男', age: 28, diagnosis: '耐多药结核', category: 'home', nextFollowUp: '2026-07-12', nurse: '李护士', avatarColor: '#38a169' },
-  { id: 4, name: '张秀英', hospitalId: '20240004', gender: '女', age: 55, diagnosis: 'HIV 合并乙肝', category: 'outpatient', nextFollowUp: '2026-07-25', nurse: '刘护士', avatarColor: '#d69e2e' },
-  { id: 5, name: '李明辉', hospitalId: '20240005', gender: '男', age: 38, diagnosis: '肺结核（复治）', category: 'home', nextFollowUp: '2026-07-18', nurse: '李护士', avatarColor: '#38a169' },
-  { id: 6, name: '赵秀梅', hospitalId: '20240006', gender: '女', age: 51, diagnosis: 'HIV 感染', category: 'inpatient', nextFollowUp: '2026-07-22', nurse: '王护士', avatarColor: '#e53e3e' },
-  { id: 7, name: '孙志伟', hospitalId: '20240007', gender: '男', age: 29, diagnosis: '肺结核（初治）', category: 'home', nextFollowUp: '2026-07-10', nurse: '刘护士', avatarColor: '#38a169' },
-  { id: 8, name: '吴德明', hospitalId: '20240008', gender: '男', age: 63, diagnosis: '耐多药结核', category: 'closed', nextFollowUp: '-', nurse: '张护士', avatarColor: '#718096' },
+  { id: 1, name: '陈建国', hospitalId: '20240001', gender: '男', age: 45, diagnosis: '肺结核（初治）', category: 'inpatient', nextFollowUp: '2026-07-15', nurse: '王护士', avatarColor: '#6366F1' },
+  { id: 2, name: '王丽华', hospitalId: '20240002', gender: '女', age: 32, diagnosis: 'HIV 感染', category: 'outpatient', nextFollowUp: '2026-07-20', nurse: '张护士', avatarColor: '#F59E0B' },
+  { id: 3, name: '刘志强', hospitalId: '20240003', gender: '男', age: 28, diagnosis: '耐多药结核', category: 'home', nextFollowUp: '2026-07-12', nurse: '李护士', avatarColor: '#10B981' },
+  { id: 4, name: '张秀英', hospitalId: '20240004', gender: '女', age: 55, diagnosis: 'HIV 合并乙肝', category: 'outpatient', nextFollowUp: '2026-07-25', nurse: '刘护士', avatarColor: '#8B5CF6' },
+  { id: 5, name: '李明辉', hospitalId: '20240005', gender: '男', age: 38, diagnosis: '肺结核（复治）', category: 'home', nextFollowUp: '2026-07-18', nurse: '李护士', avatarColor: '#0EA5E9' },
+  { id: 6, name: '赵秀梅', hospitalId: '20240006', gender: '女', age: 51, diagnosis: 'HIV 感染', category: 'inpatient', nextFollowUp: '2026-07-22', nurse: '王护士', avatarColor: '#F43F5E' },
+  { id: 7, name: '孙志伟', hospitalId: '20240007', gender: '男', age: 29, diagnosis: '肺结核（初治）', category: 'home', nextFollowUp: '2026-07-10', nurse: '刘护士', avatarColor: '#0D9488' },
+  { id: 8, name: '吴德明', hospitalId: '20240008', gender: '男', age: 63, diagnosis: '耐多药结核', category: 'closed', nextFollowUp: '-', nurse: '张护士', avatarColor: '#94A3B8' },
 ])
 
 const categoryMap = {
@@ -96,9 +110,13 @@ const filteredPatients = computed(() => {
   if (filterCategory.value) {
     list = list.filter((p) => p.category === filterCategory.value)
   }
-  if (searchKeyword.value) {
-    const kw = searchKeyword.value.trim().toLowerCase()
-    list = list.filter((p) => p.name.includes(kw) || p.hospitalId.includes(kw))
+  if (searchName.value) {
+    const name = searchName.value.trim()
+    list = list.filter((p) => p.name.includes(name))
+  }
+  if (searchRecordNo.value) {
+    const recordNo = searchRecordNo.value.trim()
+    list = list.filter((p) => p.hospitalId.includes(recordNo))
   }
   return list
 })
@@ -113,5 +131,9 @@ const filteredPatients = computed(() => {
 .header-actions {
   display: flex;
   gap: 12px;
+  flex-wrap: wrap;
+}
+.search-input {
+  width: 160px;
 }
 </style>

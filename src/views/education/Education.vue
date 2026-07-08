@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="education">
     <div class="page-header">
       <h2>健康教育</h2>
@@ -13,23 +13,44 @@
       </div>
     </div>
 
-    <div class="stat-grid">
-      <el-card v-for="s in eduStats" :key="s.label" shadow="never" class="stat-card">
-        <div class="stat-icon">{{ s.icon }}</div>
-        <div class="stat-value" :style="{ color: s.color }">{{ s.count }}</div>
-        <div class="stat-label">{{ s.label }}</div>
+    <div class="stat-grid edu-stat-grid">
+      <el-card
+        v-for="s in eduStats"
+        :key="s.label"
+        shadow="never"
+        class="stat-card edu-stat-card"
+        :style="{ '--stat-accent': s.color, '--stat-icon-bg': s.iconBg }"
+      >
+        <div class="edu-stat-row">
+          <div class="stat-icon-wrap">
+            <el-icon :size="20"><component :is="s.icon" /></el-icon>
+          </div>
+          <div class="edu-stat-info">
+            <div class="stat-value" :style="{ color: s.color }">{{ s.count }}</div>
+            <div class="stat-label">{{ s.label }}</div>
+          </div>
+        </div>
       </el-card>
     </div>
 
     <el-tabs v-model="activeTab" class="edu-tabs">
       <el-tab-pane label="健康宣教" name="push">
-        <el-row :gutter="20">
-          <el-col :xs="24" :sm="24" :md="10">
-            <el-card shadow="never" class="section-card">
+        <el-row :gutter="20" class="push-row">
+          <el-col :xs="24" :sm="24" :md="10" class="push-col">
+            <el-card shadow="never" class="section-card push-card">
               <template #header><span>推送配置</span></template>
-              <el-form :model="pushForm" label-width="90" size="small">
+              <el-form :model="pushForm" label-width="90" size="small" class="push-form">
                 <el-form-item label="选择患者">
-                  <el-select v-model="pushForm.patients" multiple placeholder="可选多位患者" style="width: 100%">
+                  <el-select
+                    v-model="pushForm.patients"
+                    multiple
+                    filterable
+                    collapse-tags
+                    collapse-tags-tooltip
+                    :max-collapse-tags="2"
+                    placeholder="输入姓名或诊断筛选患者"
+                    style="width: 100%"
+                  >
                     <el-option v-for="p in patientOptions" :key="p.value" :label="p.label" :value="p.value" />
                   </el-select>
                 </el-form-item>
@@ -64,35 +85,37 @@
                 <el-form-item v-if="pushForm.timing === 'recurring'" label="推送时间">
                   <el-time-picker v-model="pushForm.recurringTime" placeholder="选择推送时间" style="width: 100%" />
                 </el-form-item>
-                <el-form-item label-width="0">
+                <el-form-item label-width="0" class="push-submit">
                   <el-button type="primary" @click="submitPush" style="width: 100%">确认推送</el-button>
                 </el-form-item>
               </el-form>
             </el-card>
           </el-col>
-          <el-col :xs="24" :sm="24" :md="14">
-            <el-card shadow="never" class="section-card">
+          <el-col :xs="24" :sm="24" :md="14" class="push-col">
+            <el-card shadow="never" class="section-card push-card">
               <template #header><span>推送记录</span></template>
-              <el-table :data="pushRecords" stripe size="small">
-                <el-table-column prop="patients" label="推送对象" width="120" show-overflow-tooltip />
-                <el-table-column prop="article" label="文章" width="140" show-overflow-tooltip />
-                <el-table-column label="方式" width="70">
+              <div class="push-table-wrap">
+              <el-table :data="pushRecords" size="small" style="width: 100%">
+                <el-table-column prop="patients" label="推送对象" min-width="120" show-overflow-tooltip />
+                <el-table-column prop="article" label="文章" min-width="140" show-overflow-tooltip />
+                <el-table-column label="方式" min-width="70">
                   <template #default="{ row }">
                     <el-tag :type="row.channel === 'wechat' ? 'primary' : 'success'" size="small">{{ row.channel === 'wechat' ? '微信' : '短信' }}</el-tag>
                   </template>
                 </el-table-column>
-                <el-table-column label="推送类型" width="80">
+                <el-table-column label="推送类型" min-width="80">
                   <template #default="{ row }">
                     <span style="font-size: 12px">{{ row.timingLabel }}</span>
                   </template>
                 </el-table-column>
-                <el-table-column prop="pushTime" label="推送时间" width="140" />
-                <el-table-column label="状态" width="70">
+                <el-table-column prop="pushTime" label="推送时间" min-width="140" />
+                <el-table-column label="状态" min-width="70">
                   <template #default="{ row }">
                     <el-tag :type="row.status === '已推送' ? 'success' : row.status === '已取消' ? 'info' : 'warning'" size="small">{{ row.status }}</el-tag>
                   </template>
                 </el-table-column>
               </el-table>
+              </div>
             </el-card>
           </el-col>
         </el-row>
@@ -107,7 +130,7 @@
             @click="previewArticle(article)"
           >
             <div class="article-tag-row">
-              <el-tag :type="article.category === 'tb' ? 'success' : article.category === 'hiv' ? 'warning' : 'primary'" size="small" round>
+              <el-tag :type="article.category === 'tb' ? 'success' : article.category === 'hiv' ? 'warning' : 'primary'" size="small">
                 {{ article.categoryLabel }}
               </el-tag>
             </div>
@@ -161,26 +184,26 @@
               <template #header>
                 <span>密接者筛查记录</span>
               </template>
-              <el-table :data="contactRecords" stripe size="small">
-                <el-table-column prop="patientName" label="登记患者" width="100" />
-                <el-table-column prop="contactName" label="密接者" width="90" />
-                <el-table-column prop="relation" label="关系" width="70" />
-                <el-table-column prop="phone" label="手机号" width="120" />
-                <el-table-column label="筛查状态" width="100">
+              <el-table :data="contactRecords" size="small">
+                <el-table-column prop="patientName" label="登记患者" min-width="100" />
+                <el-table-column prop="contactName" label="密接者" min-width="90" />
+                <el-table-column prop="relation" label="关系" min-width="70" />
+                <el-table-column prop="phone" label="手机号" min-width="120" />
+                <el-table-column label="筛查状态" min-width="100">
                   <template #default="{ row }">
                     <el-tag :type="row.screeningStatus === '已完成' ? 'success' : row.screeningStatus === '筛查中' ? 'warning' : 'info'" size="small">
                       {{ row.screeningStatus }}
                     </el-tag>
                   </template>
                 </el-table-column>
-                <el-table-column prop="screeningDate" label="筛查日期" width="100" />
-                <el-table-column prop="result" label="结果" width="80">
+                <el-table-column prop="screeningDate" label="筛查日期" min-width="100" />
+                <el-table-column prop="result" label="结果" min-width="80">
                   <template #default="{ row }">
                     <span v-if="row.result" :style="{ color: row.result === '正常' ? 'var(--el-color-success)' : 'var(--el-color-danger)', fontWeight: 600 }">{{ row.result }}</span>
                     <span v-else style="color: var(--text-placeholder)">待查</span>
                   </template>
                 </el-table-column>
-                <el-table-column label="操作" width="80">
+                <el-table-column label="操作" min-width="80">
                   <template #default>
                     <el-button text type="primary" size="small">提醒</el-button>
                   </template>
@@ -195,7 +218,7 @@
     <el-drawer v-model="showPreview" :title="previewArticleData?.title" direction="rtl" size="520px">
       <div class="preview-body">
         <div class="preview-meta">
-          <el-tag :type="previewArticleData?.category === 'tb' ? 'success' : previewArticleData?.category === 'hiv' ? 'warning' : 'primary'" size="small" round>
+          <el-tag :type="previewArticleData?.category === 'tb' ? 'success' : previewArticleData?.category === 'hiv' ? 'warning' : 'primary'" size="small">
             {{ previewArticleData?.categoryLabel }}
           </el-tag>
           <span style="color: var(--text-placeholder, #7a9ab5); font-size: 13px">{{ previewArticleData?.date }}</span>
@@ -209,7 +232,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { Plus } from '@element-plus/icons-vue'
+import { Plus, Message, Reading, FirstAidKit, Star, User } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 
 const filterCategory = ref('')
@@ -218,11 +241,11 @@ const showPreview = ref(false)
 const previewArticleData = ref(null)
 
 const eduStats = ref([
-  { icon: '📨', label: '健康宣教', count: 4, color: '#0066cc' },
-  { icon: '📚', label: '知识文章', count: 24, color: '#0066cc' },
-  { icon: '🔬', label: '结核专区', count: 8, color: '#38a169' },
-  { icon: '❤️', label: 'HIV 专区', count: 6, color: '#d69e2e' },
-  { icon: '📖', label: '密接者', count: 15, color: '#e67e22' },
+  { icon: 'Message', label: '健康宣教', count: 4, color: '#1565C0', iconBg: '#E3F2FD' },
+  { icon: 'Reading', label: '知识文章', count: 24, color: '#1565C0', iconBg: '#E3F2FD' },
+  { icon: 'FirstAidKit', label: '结核专区', count: 8, color: '#2E7D32', iconBg: '#E8F5E9' },
+  { icon: 'Star', label: 'HIV 专区', count: 6, color: '#E65100', iconBg: '#FFF3E0' },
+  { icon: 'User', label: '密接者', count: 15, color: '#546E7A', iconBg: '#ECEFF1' },
 ])
 
 const articles = ref([
@@ -382,6 +405,55 @@ function addContact() {
 </script>
 
 <style scoped>
+.edu-stat-grid {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.edu-stat-card :deep(.el-card__body) {
+  padding: 16px 18px;
+}
+
+.edu-stat-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.edu-stat-card .stat-icon-wrap {
+  margin: 0;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+}
+
+.edu-stat-info {
+  min-width: 0;
+}
+
+.edu-stat-card .stat-value {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.edu-stat-card .stat-label {
+  margin-top: 2px;
+  font-size: 12px;
+}
+
+@media (max-width: 1200px) {
+  .edu-stat-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .edu-stat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 .header-actions {
   display: flex;
   gap: 12px;
@@ -400,6 +472,38 @@ function addContact() {
 .edu-tabs :deep(.el-tabs__active-bar) {
   background: var(--el-color-primary);
 }
+.push-row {
+  align-items: stretch;
+}
+.push-col {
+  display: flex;
+  margin-bottom: 16px;
+}
+.push-card {
+  flex: 1;
+  width: 100%;
+  margin-bottom: 0 !important;
+  display: flex;
+  flex-direction: column;
+}
+.push-card :deep(.el-card__body) {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.push-form {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.push-submit {
+  margin-top: auto;
+  margin-bottom: 0;
+}
+.push-table-wrap {
+  flex: 1;
+  min-height: 0;
+}
 .article-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -407,17 +511,17 @@ function addContact() {
 }
 .article-card {
   background: #fff;
-  border: 1px solid #c8dce8;
+  border: 1px solid var(--border-light);
   border-radius: var(--radius-card);
-  padding: 20px;
+  padding: 18px 20px;
   cursor: pointer;
-  transition: box-shadow 0.2s, transform 0.2s;
   display: flex;
   flex-direction: column;
+  transition: box-shadow 0.2s, border-color 0.2s;
 }
 .article-card:hover {
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
-  transform: translateY(-2px);
+  border-color: #BEDAFF;
+  box-shadow: var(--shadow-sm);
 }
 .article-tag-row {
   margin-bottom: 10px;
@@ -445,7 +549,7 @@ function addContact() {
   align-items: center;
   margin-top: 14px;
   padding-top: 12px;
-  border-top: 1px solid #c8dce8;
+  border-top: 1px solid var(--border-light);
 }
 .article-date {
   font-size: 12px;

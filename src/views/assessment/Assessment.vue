@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="assessment">
     <div class="page-header">
       <h2>评估模块</h2>
@@ -12,11 +12,23 @@
       </div>
     </div>
 
-    <div class="stat-grid">
-      <el-card v-for="s in stats" :key="s.label" shadow="never" class="stat-card">
-        <div class="stat-icon">{{ s.icon }}</div>
-        <div class="stat-value" :style="{ color: s.color }">{{ s.count }}</div>
-        <div class="stat-label">{{ s.label }}</div>
+    <div class="stat-grid assess-stat-grid">
+      <el-card
+        v-for="s in stats"
+        :key="s.label"
+        shadow="never"
+        class="stat-card assess-stat-card"
+        :style="{ '--stat-accent': s.color, '--stat-icon-bg': s.iconBg }"
+      >
+        <div class="assess-stat-row">
+          <div class="stat-icon-wrap">
+            <el-icon :size="20"><component :is="s.icon" /></el-icon>
+          </div>
+          <div class="assess-stat-info">
+            <div class="stat-value" :style="{ color: s.color }">{{ s.count }}</div>
+            <div class="stat-label">{{ s.label }}</div>
+          </div>
+        </div>
       </el-card>
     </div>
 
@@ -27,26 +39,26 @@
             <span>常见症状筛查</span>
             <el-button text type="primary" :icon="Plus" @click="openSymptomForm">新增记录</el-button>
           </template>
-          <el-table :data="symptomRecords" stripe style="width: 100%">
-            <el-table-column prop="patientName" label="患者姓名" width="120" />
-            <el-table-column prop="date" label="评估日期" width="110" />
+          <el-table :data="symptomRecords" style="width: 100%">
+            <el-table-column prop="patientName" label="患者姓名" min-width="120" />
+            <el-table-column prop="date" label="评估日期" min-width="110" />
             <el-table-column label="主要症状" min-width="200">
               <template #default="{ row }">
                 <el-tag v-for="s in row.symptoms" :key="s" :type="s === '呼吸困难' ? 'danger' : s === '发热' ? 'warning' : ''" size="small" style="margin-right: 4px">{{ s }}</el-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="severity" label="严重程度" width="90">
+            <el-table-column prop="severity" label="严重程度" min-width="90">
               <template #default="{ row }">
                 <el-tag :type="row.severity === '重度' ? 'danger' : row.severity === '中度' ? 'warning' : 'success'" size="small">{{ row.severity }}</el-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="doctor" label="评估医生" width="100" />
-            <el-table-column prop="status" label="状态" width="80">
+            <el-table-column prop="doctor" label="评估医生" min-width="100" />
+            <el-table-column prop="status" label="状态" min-width="80">
               <template #default="{ row }">
                 <el-tag :type="row.status === '已处理' ? 'success' : 'info'" size="small">{{ row.status }}</el-tag>
               </template>
             </el-table-column>
-            <el-table-column label="操作" width="100" fixed="right">
+            <el-table-column label="操作" width="120" fixed="right">
               <template #default>
                 <el-button text type="primary" size="small">详情</el-button>
               </template>
@@ -61,18 +73,18 @@
             <span>心理状态问卷</span>
             <el-button text type="primary" :icon="Plus" @click="openPsychologyForm">新增问卷</el-button>
           </template>
-          <el-table :data="psychologyRecords" stripe style="width: 100%">
-            <el-table-column prop="patientName" label="患者姓名" width="120" />
-            <el-table-column prop="date" label="评估日期" width="110" />
-            <el-table-column prop="score" label="总分" width="70" />
+          <el-table :data="psychologyRecords" style="width: 100%">
+            <el-table-column prop="patientName" label="患者姓名" min-width="120" />
+            <el-table-column prop="date" label="评估日期" min-width="110" />
+            <el-table-column prop="score" label="总分" min-width="70" />
             <el-table-column label="评估结果" min-width="160">
               <template #default="{ row }">
                 <el-tag :type="row.level === '正常' ? 'success' : row.level === '轻度' ? 'warning' : 'danger'" size="small">{{ row.level }}</el-tag>
                 <span style="margin-left: 8px; color: var(--text-secondary)">{{ row.summary }}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="doctor" label="评估医生" width="100" />
-            <el-table-column label="操作" width="100" fixed="right">
+            <el-table-column prop="doctor" label="评估医生" min-width="100" />
+            <el-table-column label="操作" width="120" fixed="right">
               <template #default>
                 <el-button text type="primary" size="small">详情</el-button>
               </template>
@@ -87,19 +99,19 @@
             <span>营养状况监测</span>
             <el-button text type="primary" :icon="Plus" @click="openNutritionForm">新增记录</el-button>
           </template>
-          <el-table :data="nutritionRecords" stripe style="width: 100%">
-            <el-table-column prop="patientName" label="患者姓名" width="120" />
-            <el-table-column prop="date" label="评估日期" width="110" />
-            <el-table-column prop="bmi" label="BMI" width="70" />
+          <el-table :data="nutritionRecords" style="width: 100%">
+            <el-table-column prop="patientName" label="患者姓名" min-width="120" />
+            <el-table-column prop="date" label="评估日期" min-width="110" />
+            <el-table-column prop="bmi" label="BMI" min-width="70" />
             <el-table-column label="营养状况" min-width="120">
               <template #default="{ row }">
                 <el-tag :type="row.status === '正常' ? 'success' : row.status === '营养不良' ? 'danger' : 'warning'" size="small">{{ row.status }}</el-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="weight" label="体重(kg)" width="80" />
+            <el-table-column prop="weight" label="体重(kg)" min-width="80" />
             <el-table-column prop="recommendation" label="营养建议" min-width="200" show-overflow-tooltip />
-            <el-table-column prop="doctor" label="评估医生" width="100" />
-            <el-table-column label="操作" width="100" fixed="right">
+            <el-table-column prop="doctor" label="评估医生" min-width="100" />
+            <el-table-column label="操作" width="120" fixed="right">
               <template #default>
                 <el-button text type="primary" size="small">详情</el-button>
               </template>
@@ -208,16 +220,16 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { Plus } from '@element-plus/icons-vue'
+import { Plus, Document, Monitor, Apple } from '@element-plus/icons-vue'
 
 const assessmentType = ref('')
 const activeTab = ref('symptom')
 
 const stats = ref([
-  { icon: '📋', label: '今日评估', count: 12, color: '#0066cc' },
-  { icon: '🫁', label: '症状评估', count: 58, color: '#38a169' },
-  { icon: '🧠', label: '心理评估', count: 36, color: '#d69e2e' },
-  { icon: '🥗', label: '营养评估', count: 41, color: '#e67e22' },
+  { icon: 'Document', label: '今日评估', count: 12, color: '#1565C0', iconBg: '#E3F2FD' },
+  { icon: 'Monitor', label: '症状评估', count: 58, color: '#2E7D32', iconBg: '#E8F5E9' },
+  { icon: 'Document', label: '心理评估', count: 36, color: '#E65100', iconBg: '#FFF3E0' },
+  { icon: 'Apple', label: '营养评估', count: 41, color: '#546E7A', iconBg: '#ECEFF1' },
 ])
 
 const symptomRecords = ref([
@@ -303,6 +315,49 @@ function onTabChange(tab) {
 </script>
 
 <style scoped>
+.assess-stat-grid {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.assess-stat-card :deep(.el-card__body) {
+  padding: 16px 18px;
+}
+
+.assess-stat-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.assess-stat-card .stat-icon-wrap {
+  margin: 0;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+}
+
+.assess-stat-info {
+  min-width: 0;
+}
+
+.assess-stat-card .stat-value {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.assess-stat-card .stat-label {
+  margin-top: 2px;
+  font-size: 12px;
+}
+
+@media (max-width: 992px) {
+  .assess-stat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 .assessment-tabs {
   margin-top: -4px;
 }
