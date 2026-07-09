@@ -10,24 +10,25 @@
         <el-card shadow="never" class="section-card profile-card">
           <template #header>
             <div class="profile-header">
-              <el-avatar :size="48" class="profile-avatar">陈</el-avatar>
+              <el-avatar :size="48" class="profile-avatar">{{ patient.name.charAt(0) }}</el-avatar>
               <div>
-                <div class="profile-name">陈建国</div>
-                <div class="profile-id">病历号: 20240001</div>
+                <div class="profile-name">{{ patient.name }}</div>
+                <div class="profile-id">病历号: {{ patient.hospitalId }}</div>
               </div>
             </div>
           </template>
           <div class="info-grid">
-            <div class="info-item"><label>性别</label><span>男</span></div>
-            <div class="info-item"><label>年龄</label><span>45 岁</span></div>
-            <div class="info-item"><label>诊断</label><span>肺结核（初治）</span></div>
-            <div class="info-item"><label>治疗方案</label><span>2HRZE/4HR</span></div>
-            <div class="info-item"><label>责任护士</label><span>王护士</span></div>
-            <div class="info-item"><label>主管医生</label><span>李医生</span></div>
-            <div class="info-item"><label>下次随访</label><span>2026-07-15</span></div>
+            <div class="info-item"><label>性别</label><span>{{ patient.gender }}</span></div>
+            <div class="info-item"><label>年龄</label><span>{{ patient.age }} 岁</span></div>
+            <div class="info-item"><label>联系电话</label><span>{{ patient.phone }}</span></div>
+            <div class="info-item"><label>诊断</label><span>{{ patient.diagnosis }}</span></div>
+            <div class="info-item"><label>治疗方案</label><span>{{ patient.treatmentPlan }}</span></div>
+            <div class="info-item"><label>责任护士</label><span>{{ patient.nurse }}</span></div>
+            <div class="info-item"><label>主管医生</label><span>{{ patient.doctor }}</span></div>
+            <div class="info-item"><label>下次随访</label><span>{{ patient.nextFollowUp }}</span></div>
             <div class="info-item">
               <label>管理状态</label>
-              <span><el-tag size="small" type="danger" style="color: #f00;">在治</el-tag></span>
+              <span><el-tag size="small" :type="patient.statusTag" style="color: #f00;">{{ patient.statusLabel }}</el-tag></span>
             </div>
           </div>
         </el-card>
@@ -97,12 +98,26 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { ArrowLeft, Edit } from '@element-plus/icons-vue'
 
 const router = useRouter()
+const route = useRoute()
 const loading = ref(false)
+
+const patientMap = {
+  1: { name: '陈建国', hospitalId: '20240001', phone: '13800001111', gender: '男', age: 45, diagnosis: '肺结核（初治）', treatmentPlan: '2HRZE/4HR', nurse: '王护士', doctor: '李医生', nextFollowUp: '2026-07-15', statusLabel: '在治', statusTag: 'danger' },
+  2: { name: '王丽华', hospitalId: '20240002', phone: '13800002222', gender: '女', age: 32, diagnosis: 'HIV 感染', treatmentPlan: 'TDF/3TC/DTG', nurse: '张护士', doctor: '李医生', nextFollowUp: '2026-07-20', statusLabel: '在治', statusTag: 'danger' },
+  3: { name: '刘志强', hospitalId: '20240003', phone: '13800003333', gender: '男', age: 28, diagnosis: '耐多药结核', treatmentPlan: 'Bdq-Lzd-Mfx', nurse: '李护士', doctor: '王医生', nextFollowUp: '2026-07-12', statusLabel: '在治', statusTag: 'danger' },
+  4: { name: '张秀英', hospitalId: '20240004', phone: '13800004444', gender: '女', age: 55, diagnosis: 'HIV 合并乙肝', treatmentPlan: 'TAF/FTC/BIC', nurse: '刘护士', doctor: '李医生', nextFollowUp: '2026-07-25', statusLabel: '在治', statusTag: 'danger' },
+  5: { name: '李明辉', hospitalId: '20240005', phone: '13800005555', gender: '男', age: 38, diagnosis: '肺结核（复治）', treatmentPlan: '2HRZE/4HR', nurse: '李护士', doctor: '王医生', nextFollowUp: '2026-07-18', statusLabel: '在治', statusTag: 'danger' },
+  6: { name: '赵秀梅', hospitalId: '20240006', phone: '13800006666', gender: '女', age: 51, diagnosis: 'HIV 感染', treatmentPlan: 'TDF/3TC/EFV', nurse: '王护士', doctor: '李医生', nextFollowUp: '2026-07-22', statusLabel: '在治', statusTag: 'danger' },
+  7: { name: '孙志伟', hospitalId: '20240007', phone: '13800007777', gender: '男', age: 29, diagnosis: '肺结核（初治）', treatmentPlan: '2HRZE/4HR', nurse: '刘护士', doctor: '王医生', nextFollowUp: '2026-07-10', statusLabel: '在治', statusTag: 'danger' },
+  8: { name: '吴德明', hospitalId: '20240008', phone: '13800008888', gender: '男', age: 63, diagnosis: '耐多药结核', treatmentPlan: 'Bdq-Lzd-Mfx', nurse: '张护士', doctor: '王医生', nextFollowUp: '-', statusLabel: '已结案', statusTag: 'info' },
+}
+
+const patient = computed(() => patientMap[Number(route.params.id)] || patientMap[1])
 
 const contacts = ref([
   { name: '张妻', relation: '配偶', screeningStatus: 'done' },
