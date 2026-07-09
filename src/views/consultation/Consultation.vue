@@ -203,6 +203,13 @@ function scrollToBottom() {
 </script>
 
 <style scoped>
+.consultation {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
 .online-dot {
   display: inline-block;
   width: 6px;
@@ -216,8 +223,8 @@ function scrollToBottom() {
 .chat-layout {
   display: flex;
   gap: 16px;
-  height: calc(100vh - var(--navbar-height) - 100px);
-  min-height: 520px;
+  flex: 1;
+  min-height: 480px;
 }
 
 /* 患者列表 */
@@ -263,7 +270,7 @@ function scrollToBottom() {
   background: #F9FAFB;
 }
 .patient-item.active {
-  background: #E6F4FF;
+  background: var(--sidebar-active);
 }
 .patient-avatar {
   background: #6B7280;
@@ -435,5 +442,21 @@ function scrollToBottom() {
 .input-tools {
   display: flex;
   gap: 4px;
+}
+
+@media (max-width: 768px) {
+  .chat-layout {
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .patient-panel {
+    width: 100%;
+    max-height: 240px;
+  }
+
+  .chat-panel {
+    min-height: 420px;
+  }
 }
 </style>

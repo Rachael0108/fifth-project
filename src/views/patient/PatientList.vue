@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="patient-list">
     <div class="page-header">
       <h2>患者档案</h2>
@@ -127,11 +127,6 @@ const filteredPatients = computed(() => {
   display: flex;
   align-items: center;
   gap: 8px;
-}
-.header-actions {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
 }
 .search-input {
   width: 160px;

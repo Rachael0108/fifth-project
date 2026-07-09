@@ -18,7 +18,9 @@
 
   /* 布局 */
   --sidebar-width: 228px;
+  --sidebar-width-collapsed: 64px;
   --navbar-height: 60px;
+  --grid-gutter: 16px;
   --radius-card: 14px;
   --radius-sm: 8px;
   --radius-lg: 20px;
@@ -30,6 +32,7 @@
   /* 阴影 */
   --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
   --shadow-sm: 0 1px 4px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08);
 
   /* 侧边栏 — 浅色 */
   --sidebar-bg: #FFFFFF;
@@ -76,11 +79,6 @@ body {
 
 /* ── 页面结构 ── */
 
-.page-container {
-  max-width: 1440px;
-  margin: 0 auto;
-}
-
 .page-header {
   display: flex;
   justify-content: space-between;
@@ -102,6 +100,32 @@ body {
   color: var(--text-muted);
   margin-top: 6px;
   font-weight: 400;
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* ── 页面 Tabs ── */
+
+.page-tabs {
+  margin-top: -4px;
+}
+
+.page-tabs .el-tabs__header {
+  margin-bottom: 16px;
+}
+
+.page-tabs .el-tabs__item.is-active {
+  color: var(--el-color-primary);
+  font-weight: 600;
+}
+
+.page-tabs .el-tabs__active-bar {
+  background: var(--el-color-primary);
 }
 
 /* ── 统计卡片 ── */
@@ -157,6 +181,66 @@ body {
   color: var(--text-muted);
   margin-top: 4px;
   font-weight: 500;
+}
+
+/* 横向统计卡：左图标 + 右数值 */
+.stat-card--horizontal .el-card__body {
+  padding: 16px 18px;
+}
+
+.stat-card--horizontal .stat-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.stat-card--horizontal .stat-icon-wrap {
+  margin: 0;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+}
+
+.stat-card--horizontal .stat-info {
+  min-width: 0;
+}
+
+.stat-card--horizontal .stat-value {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.stat-card--horizontal .stat-label {
+  margin-top: 2px;
+  font-size: 12px;
+}
+
+.stat-grid--4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.stat-grid--5 {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+@media (max-width: 1200px) {
+  .stat-grid--5 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .stat-grid--4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .stat-grid--5 {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 /* ── 区块卡片 ── */

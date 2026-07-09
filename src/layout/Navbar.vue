@@ -1,13 +1,19 @@
 <template>
   <el-header class="navbar">
     <div class="navbar-left">
+      <el-button
+        text
+        class="nav-icon-btn collapse-btn"
+        :icon="layoutStore.isMobile ? Fold : (layoutStore.collapsed ? Expand : Fold)"
+        @click="layoutStore.toggleCollapsed()"
+      />
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: '/dashboard' }">首页</el-breadcrumb-item>
         <el-breadcrumb-item v-if="route.meta.title">{{ route.meta.title }}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <div class="navbar-right">
-      <el-badge :value="unreadAlerts" :hidden="!unreadAlerts" class="mr-12">
+      <el-badge :value="unreadAlerts" :hidden="!unreadAlerts" class="alert-badge">
         <el-button text :icon="Bell" class="nav-icon-btn" @click="$router.push('/alert')" />
       </el-badge>
       <el-dropdown trigger="click">
@@ -33,12 +39,14 @@
 <script setup>
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { Bell, ArrowDown, SwitchButton } from '@element-plus/icons-vue'
+import { Bell, ArrowDown, SwitchButton, Fold, Expand } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores/user'
+import { useLayoutStore } from '@/stores/layout'
 
 const route = useRoute()
 const router = useRouter()
 const userStore = useUserStore()
+const layoutStore = useLayoutStore()
 const unreadAlerts = ref(4)
 
 function handleLogout() {
@@ -61,13 +69,23 @@ function handleLogout() {
   z-index: 10;
 }
 
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
 .navbar-right {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-shrink: 0;
 }
 
-.mr-12 { margin-right: 4px; }
+.alert-badge {
+  margin-right: 4px;
+}
 
 .nav-icon-btn {
   font-size: 20px;
@@ -81,6 +99,10 @@ function handleLogout() {
 .nav-icon-btn:hover {
   background: #F1F5F9;
   color: var(--el-color-primary);
+}
+
+.collapse-btn {
+  flex-shrink: 0;
 }
 
 .user-info {
@@ -111,5 +133,15 @@ function handleLogout() {
 .arrow-icon {
   font-size: 12px;
   color: var(--text-muted);
+}
+
+@media (max-width: 576px) {
+  .navbar {
+    padding: 0 12px;
+  }
+
+  .user-name {
+    display: none;
+  }
 }
 </style>

@@ -1,7 +1,12 @@
 <template>
   <el-container class="app-container">
     <Sidebar />
-    <el-container class="right-panel">
+    <div
+      v-if="layoutStore.isMobile && layoutStore.mobileOpen"
+      class="sidebar-mask"
+      @click="layoutStore.closeMobile()"
+    />
+    <el-container class="right-panel" :style="{ marginLeft: layoutStore.sidebarOffset }">
       <Navbar />
       <el-main class="app-main">
         <div class="main-content">
@@ -17,8 +22,21 @@
 </template>
 
 <script setup>
+import { onMounted, onUnmounted } from 'vue'
 import Sidebar from './Sidebar.vue'
 import Navbar from './Navbar.vue'
+import { useLayoutStore } from '@/stores/layout'
+
+const layoutStore = useLayoutStore()
+let removeResize = null
+
+onMounted(() => {
+  removeResize = layoutStore.initResizeListener()
+})
+
+onUnmounted(() => {
+  removeResize?.()
+})
 </script>
 
 <style scoped>
@@ -27,8 +45,9 @@ import Navbar from './Navbar.vue'
 }
 
 .right-panel {
-  margin-left: var(--sidebar-width);
   flex-direction: column;
+  transition: margin-left 0.25s ease;
+  min-width: 0;
 }
 
 .app-main {
@@ -36,11 +55,25 @@ import Navbar from './Navbar.vue'
   padding: 20px 24px;
   overflow-y: auto;
   height: calc(100vh - var(--navbar-height));
+  display: flex;
+  flex-direction: column;
 }
 
 .main-content {
   max-width: 1440px;
   margin: 0 auto;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.35);
+  z-index: 99;
 }
 
 .fade-enter-active,
@@ -51,5 +84,11 @@ import Navbar from './Navbar.vue'
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+@media (max-width: 992px) {
+  .app-main {
+    padding: 16px;
+  }
 }
 </style>

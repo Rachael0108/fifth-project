@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="education">
     <div class="page-header">
       <h2>健康教育</h2>
@@ -13,19 +13,19 @@
       </div>
     </div>
 
-    <div class="stat-grid edu-stat-grid">
+    <div class="stat-grid stat-grid--5">
       <el-card
         v-for="s in eduStats"
         :key="s.label"
         shadow="never"
-        class="stat-card edu-stat-card"
+        class="stat-card stat-card--horizontal"
         :style="{ '--stat-accent': s.color, '--stat-icon-bg': s.iconBg }"
       >
-        <div class="edu-stat-row">
+        <div class="stat-row">
           <div class="stat-icon-wrap">
             <el-icon :size="20"><component :is="s.icon" /></el-icon>
           </div>
-          <div class="edu-stat-info">
+          <div class="stat-info">
             <div class="stat-value" :style="{ color: s.color }">{{ s.count }}</div>
             <div class="stat-label">{{ s.label }}</div>
           </div>
@@ -33,9 +33,9 @@
       </el-card>
     </div>
 
-    <el-tabs v-model="activeTab" class="edu-tabs">
+    <el-tabs v-model="activeTab" class="page-tabs">
       <el-tab-pane label="健康宣教" name="push">
-        <el-row :gutter="20" class="push-row">
+        <el-row :gutter="16" class="push-row">
           <el-col :xs="24" :sm="24" :md="10" class="push-col">
             <el-card shadow="never" class="section-card push-card">
               <template #header><span>推送配置</span></template>
@@ -109,7 +109,7 @@
                   </template>
                 </el-table-column>
                 <el-table-column prop="pushTime" label="推送时间" min-width="140" />
-                <el-table-column label="状态" min-width="70">
+                <el-table-column label="状态" min-width="90">
                   <template #default="{ row }">
                     <el-tag :type="row.status === '已推送' ? 'success' : row.status === '已取消' ? 'info' : 'warning'" size="small">{{ row.status }}</el-tag>
                   </template>
@@ -147,8 +147,8 @@
       </el-tab-pane>
 
       <el-tab-pane label="结核密接者管理" name="contacts">
-        <el-row :gutter="20">
-          <el-col :span="8">
+        <el-row :gutter="16">
+          <el-col :xs="24" :sm="24" :md="8">
             <el-card shadow="never" class="section-card">
               <template #header>
                 <span>新增密接者</span>
@@ -179,7 +179,7 @@
               </el-form>
             </el-card>
           </el-col>
-          <el-col :span="16">
+          <el-col :xs="24" :sm="24" :md="16">
             <el-card shadow="never" class="section-card">
               <template #header>
                 <span>密接者筛查记录</span>
@@ -223,7 +223,7 @@
           </el-tag>
           <span style="color: var(--text-placeholder, #7a9ab5); font-size: 13px">{{ previewArticleData?.date }}</span>
         </div>
-        <h3 style="margin: 16px 0; font-size: 20px; color: var(--text-primary, #0a2d4d)">{{ previewArticleData?.title }}</h3>
+        <h3 style="margin: 16px 0; font-size: 20px; color: var(--text-primary)">{{ previewArticleData?.title }}</h3>
         <div class="preview-content" v-html="previewArticleData?.content"></div>
       </div>
     </el-drawer>
@@ -405,73 +405,6 @@ function addContact() {
 </script>
 
 <style scoped>
-.edu-stat-grid {
-  grid-template-columns: repeat(5, 1fr);
-}
-
-.edu-stat-card :deep(.el-card__body) {
-  padding: 16px 18px;
-}
-
-.edu-stat-row {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.edu-stat-card .stat-icon-wrap {
-  margin: 0;
-  flex-shrink: 0;
-  width: 44px;
-  height: 44px;
-  border-radius: 10px;
-}
-
-.edu-stat-info {
-  min-width: 0;
-}
-
-.edu-stat-card .stat-value {
-  font-size: 24px;
-  font-weight: 600;
-  line-height: 1.2;
-}
-
-.edu-stat-card .stat-label {
-  margin-top: 2px;
-  font-size: 12px;
-}
-
-@media (max-width: 1200px) {
-  .edu-stat-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
-  .edu-stat-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-.header-actions {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-}
-.edu-tabs {
-  margin-top: -4px;
-}
-.edu-tabs :deep(.el-tabs__header) {
-  margin-bottom: 16px;
-}
-.edu-tabs :deep(.el-tabs__item.is-active) {
-  color: var(--el-color-primary);
-  font-weight: 600;
-}
-.edu-tabs :deep(.el-tabs__active-bar) {
-  background: var(--el-color-primary);
-}
 .push-row {
   align-items: stretch;
 }
@@ -506,7 +439,7 @@ function addContact() {
 }
 .article-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 16px;
 }
 .article-card {
@@ -520,7 +453,7 @@ function addContact() {
   transition: box-shadow 0.2s, border-color 0.2s;
 }
 .article-card:hover {
-  border-color: #BEDAFF;
+  border-color: var(--el-color-primary-light-7);
   box-shadow: var(--shadow-sm);
 }
 .article-tag-row {
@@ -529,13 +462,13 @@ function addContact() {
 .article-title {
   font-size: 16px;
   font-weight: 600;
-  color: var(--text-primary, #0a2d4d);
+  color: var(--text-primary);
   margin-bottom: 8px;
   line-height: 1.4;
 }
 .article-desc {
   font-size: 13px;
-  color: var(--text-muted, #4a7a9a);
+  color: var(--text-muted);
   line-height: 1.6;
   flex: 1;
   display: -webkit-box;
@@ -553,7 +486,7 @@ function addContact() {
 }
 .article-date {
   font-size: 12px;
-  color: var(--text-placeholder, #7a9ab5);
+  color: var(--text-placeholder);
 }
 .preview-body {
   padding: 0 8px;
@@ -564,12 +497,12 @@ function addContact() {
   gap: 12px;
 }
 .preview-content {
-  color: var(--text-secondary, #2c5282);
+  color: var(--text-secondary);
   line-height: 1.8;
   font-size: 15px;
 }
 .preview-content h4 {
-  color: var(--text-primary, #0a2d4d);
+  color: var(--text-primary);
   font-size: 16px;
   margin: 20px 0 8px;
 }

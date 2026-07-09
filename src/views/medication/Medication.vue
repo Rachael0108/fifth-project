@@ -1,23 +1,23 @@
-﻿<template>
+<template>
   <div class="medication">
     <div class="page-header">
       <h2>服药复诊</h2>
       <el-date-picker v-model="currentDate" type="date" placeholder="选择日期" style="width: 160px" />
     </div>
 
-    <div class="stat-grid med-stat-grid">
+    <div class="stat-grid stat-grid--4">
       <el-card
         v-for="s in medStats"
         :key="s.label"
         shadow="never"
-        class="stat-card med-stat-card"
+        class="stat-card stat-card--horizontal"
         :style="{ '--stat-accent': s.color, '--stat-icon-bg': s.iconBg }"
       >
-        <div class="med-stat-row">
+        <div class="stat-row">
           <div class="stat-icon-wrap">
             <el-icon :size="20"><component :is="s.icon" /></el-icon>
           </div>
-          <div class="med-stat-info">
+          <div class="stat-info">
             <div class="stat-value" :style="{ color: s.color }">{{ s.value }}</div>
             <div class="stat-label">{{ s.label }}</div>
           </div>
@@ -25,9 +25,9 @@
       </el-card>
     </div>
 
-    <el-tabs v-model="activeTab" class="med-tabs">
+    <el-tabs v-model="activeTab" class="page-tabs">
       <el-tab-pane label="今日打卡" name="daily">
-        <el-row :gutter="20" class="panel-row">
+        <el-row :gutter="16" class="panel-row">
           <el-col :xs="24" :sm="24" :md="12" class="panel-col">
             <el-card shadow="never" class="section-card panel-card">
               <template #header><span>今日服药打卡</span></template>
@@ -73,7 +73,7 @@
             </el-card>
           </el-col>
         </el-row>
-        <el-row :gutter="20" class="panel-row">
+        <el-row :gutter="16" class="panel-row">
           <el-col :xs="24" :sm="24" :md="12" class="panel-col">
             <el-card shadow="never" class="section-card panel-card">
               <template #header><span>漏服提醒与补救指导</span></template>
@@ -426,44 +426,6 @@ function submitSymptom() {
 </script>
 
 <style scoped>
-/* 统计卡片 — 左图标右数值 */
-.med-stat-grid {
-  grid-template-columns: repeat(4, 1fr);
-}
-
-.med-stat-card :deep(.el-card__body) {
-  padding: 16px 18px;
-}
-
-.med-stat-row {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.med-stat-card .stat-icon-wrap {
-  margin: 0;
-  flex-shrink: 0;
-  width: 44px;
-  height: 44px;
-  border-radius: 10px;
-}
-
-.med-stat-info {
-  min-width: 0;
-}
-
-.med-stat-card .stat-value {
-  font-size: 24px;
-  font-weight: 600;
-  line-height: 1.2;
-}
-
-.med-stat-card .stat-label {
-  margin-top: 2px;
-  font-size: 12px;
-}
-
 /* 等高面板 */
 .panel-row {
   align-items: stretch;
@@ -492,14 +454,6 @@ function submitSymptom() {
 
 .panel-card :deep(.el-card__header) {
   flex-shrink: 0;
-}
-
-.med-tabs {
-  margin-top: -4px;
-}
-
-.med-tabs :deep(.el-tabs__header) {
-  margin-bottom: 16px;
 }
 
 .immunity-chart {
@@ -589,11 +543,5 @@ function submitSymptom() {
   color: var(--text-secondary);
   line-height: 1.6;
   margin: 0;
-}
-
-@media (max-width: 992px) {
-  .med-stat-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 </style>

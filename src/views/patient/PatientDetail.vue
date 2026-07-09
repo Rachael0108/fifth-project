@@ -1,11 +1,11 @@
-﻿<template>
+<template>
   <div class="patient-detail" v-loading="loading">
     <div class="page-header">
       <el-button text :icon="ArrowLeft" @click="goBack">返回列表</el-button>
       <el-button type="primary" size="small" :icon="Edit">编辑档案</el-button>
     </div>
 
-    <el-row :gutter="20" class="detail-row">
+    <el-row :gutter="16" class="detail-row">
       <el-col :xs="24" :sm="24" :md="8" class="detail-col">
         <el-card shadow="never" class="section-card profile-card">
           <template #header>
@@ -172,11 +172,11 @@ function goBack() {
 .profile-name {
   font-size: 17px;
   font-weight: 600;
-  color: var(--text-primary, #0a2d4d);
+  color: var(--text-primary);
 }
 .profile-id {
   font-size: 13px;
-  color: var(--text-muted, #4a7a9a);
+  color: var(--text-muted);
   margin-top: 2px;
 }
 .info-grid {
@@ -187,12 +187,12 @@ function goBack() {
 .info-item label {
   display: block;
   font-size: 12px;
-  color: var(--text-muted, #4a7a9a);
+  color: var(--text-muted);
   margin-bottom: 2px;
 }
 .info-item span {
   font-size: 14px;
-  color: var(--text-primary, #0a2d4d);
+  color: var(--text-primary);
   font-weight: 500;
 }
 .contact-row {
@@ -209,17 +209,17 @@ function goBack() {
 }
 .contact-info span {
   font-size: 14px;
-  color: var(--text-primary, #0a2d4d);
+  color: var(--text-primary);
 }
 .contact-rel {
   font-size: 12px;
-  color: var(--text-muted, #4a7a9a);
+  color: var(--text-muted);
   margin-left: 8px;
 }
 .tl-title {
   font-weight: 600;
   font-size: 14px;
-  color: var(--text-primary, #0a2d4d);
+  color: var(--text-primary);
 }
 .tl-desc {
   font-size: 13px;

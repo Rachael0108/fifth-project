@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="assessment">
     <div class="page-header">
       <h2>评估模块</h2>
@@ -12,19 +12,19 @@
       </div>
     </div>
 
-    <div class="stat-grid assess-stat-grid">
+    <div class="stat-grid stat-grid--4">
       <el-card
         v-for="s in stats"
         :key="s.label"
         shadow="never"
-        class="stat-card assess-stat-card"
+        class="stat-card stat-card--horizontal"
         :style="{ '--stat-accent': s.color, '--stat-icon-bg': s.iconBg }"
       >
-        <div class="assess-stat-row">
+        <div class="stat-row">
           <div class="stat-icon-wrap">
             <el-icon :size="20"><component :is="s.icon" /></el-icon>
           </div>
-          <div class="assess-stat-info">
+          <div class="stat-info">
             <div class="stat-value" :style="{ color: s.color }">{{ s.count }}</div>
             <div class="stat-label">{{ s.label }}</div>
           </div>
@@ -32,7 +32,7 @@
       </el-card>
     </div>
 
-    <el-tabs v-model="activeTab" class="assessment-tabs" @tab-change="onTabChange">
+    <el-tabs v-model="activeTab" class="page-tabs" @tab-change="onTabChange">
       <el-tab-pane label="症状评估" name="symptom">
         <el-card shadow="never" class="section-card">
           <template #header>
@@ -219,7 +219,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { Plus, Document, Monitor, Apple } from '@element-plus/icons-vue'
 
 const assessmentType = ref('')
@@ -313,62 +313,3 @@ function onTabChange(tab) {
   activeTab.value = tab
 }
 </script>
-
-<style scoped>
-.assess-stat-grid {
-  grid-template-columns: repeat(4, 1fr);
-}
-
-.assess-stat-card :deep(.el-card__body) {
-  padding: 16px 18px;
-}
-
-.assess-stat-row {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.assess-stat-card .stat-icon-wrap {
-  margin: 0;
-  flex-shrink: 0;
-  width: 44px;
-  height: 44px;
-  border-radius: 10px;
-}
-
-.assess-stat-info {
-  min-width: 0;
-}
-
-.assess-stat-card .stat-value {
-  font-size: 24px;
-  font-weight: 600;
-  line-height: 1.2;
-}
-
-.assess-stat-card .stat-label {
-  margin-top: 2px;
-  font-size: 12px;
-}
-
-@media (max-width: 992px) {
-  .assess-stat-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-.assessment-tabs {
-  margin-top: -4px;
-}
-.assessment-tabs :deep(.el-tabs__header) {
-  margin-bottom: 16px;
-}
-.assessment-tabs :deep(.el-tabs__item.is-active) {
-  color: var(--el-color-primary);
-  font-weight: 600;
-}
-.assessment-tabs :deep(.el-tabs__active-bar) {
-  background: var(--el-color-primary);
-}
-</style>

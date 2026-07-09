@@ -78,17 +78,17 @@ import { ElMessage } from 'element-plus'
 const filterType = ref('')
 
 const alertTypeMap = {
-  overdue: { label: '逾期未复诊', tag: 'danger', icon: Clock, color: '#FF4D4F', urgency: '紧急' },
-  compliance: { label: '依从性下降', tag: 'warning', icon: WarningFilled, color: '#FAAD14', urgency: '关注' },
-  abnormal: { label: '检查结果异常', tag: 'danger', icon: InfoFilled, color: '#FF4D4F', urgency: '紧急' },
-  lost: { label: '即将失访', tag: 'info', icon: RemoveFilled, color: '#8C8C8C', urgency: '一般' },
+  overdue: { label: '逾期未复诊', tag: 'danger', icon: Clock, color: '#F43F5E', urgency: '紧急' },
+  compliance: { label: '依从性下降', tag: 'warning', icon: WarningFilled, color: '#F59E0B', urgency: '关注' },
+  abnormal: { label: '检查结果异常', tag: 'danger', icon: InfoFilled, color: '#F43F5E', urgency: '紧急' },
+  lost: { label: '即将失访', tag: 'info', icon: RemoveFilled, color: '#64748B', urgency: '一般' },
 }
 
 const alertStats = ref([
-  { key: 'overdue', label: '逾期未复诊', count: 4, color: '#FF4D4F', iconBg: '#FFF1F0' },
-  { key: 'compliance', label: '依从性下降', count: 4, color: '#FAAD14', iconBg: '#FFFBE6' },
-  { key: 'abnormal', label: '检查结果异常', count: 2, color: '#FF4D4F', iconBg: '#FFF1F0' },
-  { key: 'lost', label: '即将失访', count: 2, color: '#8C8C8C', iconBg: '#F5F5F5' },
+  { key: 'overdue', label: '逾期未复诊', count: 4, color: '#F43F5E', iconBg: '#FFE4E6' },
+  { key: 'compliance', label: '依从性下降', count: 4, color: '#F59E0B', iconBg: '#FEF3C7' },
+  { key: 'abnormal', label: '检查结果异常', count: 2, color: '#F43F5E', iconBg: '#FFE4E6' },
+  { key: 'lost', label: '即将失访', count: 2, color: '#64748B', iconBg: '#F1F5F9' },
 ])
 
 const alerts = ref([
@@ -116,13 +116,6 @@ function handleProcess(alert) {
 </script>
 
 <style scoped>
-.page-desc {
-  font-size: 13px;
-  color: var(--text-muted);
-  margin-top: 4px;
-  font-weight: 400;
-}
-
 .stat-card--clickable {
   cursor: pointer;
 }
@@ -133,8 +126,14 @@ function handleProcess(alert) {
 
 .alert-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 16px;
+}
+
+@media (max-width: 576px) {
+  .alert-cards {
+    grid-template-columns: 1fr;
+  }
 }
 
 .alert-card {
