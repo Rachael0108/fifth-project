@@ -75,6 +75,7 @@ function onSelect() {
   z-index: 100;
   transition: width 0.25s ease, transform 0.25s ease;
   overflow: hidden;
+  box-shadow: var(--shadow-sm);
 }
 
 .sidebar-wrapper.is-collapsed {

@@ -226,10 +226,10 @@ const assessmentType = ref('')
 const activeTab = ref('symptom')
 
 const stats = ref([
-  { icon: 'Document', label: '今日评估', count: 12, color: '#1565C0', iconBg: '#E3F2FD' },
-  { icon: 'Monitor', label: '症状评估', count: 58, color: '#2E7D32', iconBg: '#E8F5E9' },
-  { icon: 'Document', label: '心理评估', count: 36, color: '#E65100', iconBg: '#FFF3E0' },
-  { icon: 'Apple', label: '营养评估', count: 41, color: '#546E7A', iconBg: '#ECEFF1' },
+  { icon: 'Document', label: '今日评估', count: 12, color: '#5B9BD5', iconBg: '#E8F2FA' },
+  { icon: 'Monitor', label: '症状评估', count: 58, color: '#66BB6A', iconBg: '#E8F5E9' },
+  { icon: 'Document', label: '心理评估', count: 36, color: '#FFB300', iconBg: '#FFF8E1' },
+  { icon: 'Apple', label: '营养评估', count: 41, color: '#7EC8B8', iconBg: '#E8F5E9' },
 ])
 
 const symptomRecords = ref([

@@ -137,15 +137,16 @@ function handleProcess(alert) {
 }
 
 .alert-card {
-  background: #fff;
+  background: var(--surface);
   border-radius: var(--radius-card);
   padding: 18px 20px;
   border: 1px solid var(--border-light);
-  transition: box-shadow 0.2s;
+  transition: box-shadow 0.25s, transform 0.25s;
 }
 
 .alert-card:hover {
   box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
 }
 
 .alert-top {

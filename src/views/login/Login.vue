@@ -109,7 +109,7 @@ async function handleLogin() {
 
 .login-brand {
   flex: 1;
-  background: linear-gradient(160deg, #0F172A 0%, #1E293B 50%, #0F766E 100%);
+  background: linear-gradient(160deg, #4A85BC 0%, #5B9BD5 45%, #89CFF0 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -133,7 +133,7 @@ async function handleLogin() {
 .brand-circle--1 {
   width: 350px;
   height: 350px;
-  background: rgba(45, 212, 191, 0.2);
+  background: rgba(255, 255, 255, 0.25);
   top: -80px;
   right: -60px;
 }
@@ -141,7 +141,7 @@ async function handleLogin() {
 .brand-circle--2 {
   width: 280px;
   height: 280px;
-  background: rgba(99, 102, 241, 0.15);
+  background: rgba(137, 207, 240, 0.35);
   bottom: -40px;
   left: -40px;
 }
@@ -149,14 +149,14 @@ async function handleLogin() {
 .brand-circle--3 {
   width: 200px;
   height: 200px;
-  background: rgba(139, 92, 246, 0.12);
+  background: rgba(91, 155, 213, 0.3);
   top: 50%;
   left: 40%;
 }
 
 .brand-content {
   text-align: center;
-  color: #F1F5F9;
+  color: #F0F9FF;
   position: relative;
   z-index: 1;
   max-width: 420px;
@@ -166,14 +166,14 @@ async function handleLogin() {
   width: 72px;
   height: 72px;
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 24px;
-  color: #2DD4BF;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #E8F2FA;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .brand-content h1 {
@@ -186,14 +186,14 @@ async function handleLogin() {
 .brand-subtitle {
   font-size: 16px;
   margin-top: 14px;
-  color: #CBD5E1;
+  color: #E8F2FA;
   font-weight: 500;
 }
 
 .brand-desc {
   font-size: 13px;
   margin-top: 10px;
-  color: #94A3B8;
+  color: #C5DFF7;
 }
 
 .brand-tags {
@@ -209,9 +209,9 @@ async function handleLogin() {
   border-radius: 20px;
   font-size: 12px;
   font-weight: 500;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #E2E8F0;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #F0F9FF;
 }
 
 .login-form-panel {
@@ -219,7 +219,7 @@ async function handleLogin() {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #fff;
+  background: var(--surface);
   padding: 48px;
   position: relative;
 }
@@ -247,7 +247,6 @@ async function handleLogin() {
   font-size: 26px;
   font-weight: 700;
   color: var(--text-primary);
-  letter-spacing: -0.02em;
 }
 
 .login-subtitle {
@@ -270,7 +269,7 @@ async function handleLogin() {
   color: var(--text-placeholder);
   margin-top: 20px;
   padding: 10px;
-  background: #F8FAFC;
+  background: #F5F6F8;
   border-radius: 8px;
 }
 </style>

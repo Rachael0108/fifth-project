@@ -110,18 +110,18 @@ const alertTypeMap = {
 }
 
 const stats = ref([
-  { icon: 'User', label: '在管患者总数', value: 128, color: '#0D9488', iconBg: '#CCFBF1', trend: 3 },
-  { icon: 'House', label: '住院患者', value: 32, color: '#F43F5E', iconBg: '#FFE4E6', trend: -2 },
-  { icon: 'FirstAidKit', label: '服药依从率', value: '86%', color: '#10B981', iconBg: '#D1FAE5', trend: 2 },
-  { icon: 'WarningFilled', label: '待处理预警', value: 12, color: '#F59E0B', iconBg: '#FEF3C7', trend: -8 },
-  { icon: 'Plus', label: '今日新增患者', value: 3, color: '#6366F1', iconBg: '#E0E7FF', trend: 0 },
-  { icon: 'DataAnalysis', label: '管理完成率', value: '94%', color: '#8B5CF6', iconBg: '#EDE9FE', trend: 1 },
+  { icon: 'User', label: '在管患者总数', value: 128, color: '#5B9BD5', iconBg: '#E8F2FA', trend: 3 },
+  { icon: 'House', label: '住院患者', value: 32, color: '#EF5350', iconBg: '#FFEBEE', trend: -2 },
+  { icon: 'FirstAidKit', label: '服药依从率', value: '86%', color: '#66BB6A', iconBg: '#E8F5E9', trend: 2 },
+  { icon: 'WarningFilled', label: '待处理预警', value: 12, color: '#FFB300', iconBg: '#FFF8E1', trend: -8 },
+  { icon: 'Plus', label: '今日新增患者', value: 3, color: '#7BA7D7', iconBg: '#E8F2FA', trend: 0 },
+  { icon: 'DataAnalysis', label: '管理完成率', value: '94%', color: '#89CFF0', iconBg: '#E8F2FA', trend: 1 },
 ])
 
 const barData = ref([
-  { label: '住院患者', count: 32, percent: 25, color: '#F43F5E' },
-  { label: '门诊随访', count: 45, percent: 35, color: '#F59E0B' },
-  { label: '居家服药', count: 28, percent: 22, color: '#10B981' },
+  { label: '住院患者', count: 32, percent: 25, color: '#EF5350' },
+  { label: '门诊随访', count: 45, percent: 35, color: '#FFB300' },
+  { label: '居家服药', count: 28, percent: 22, color: '#66BB6A' },
   { label: '已结案', count: 10, percent: 8, color: '#64748B' },
   { label: '失访', count: 3, percent: 2, color: '#CBD5E1' },
 ])
@@ -274,7 +274,7 @@ function handleCall(row) {
 .bar-track {
   flex: 1;
   height: 12px;
-  background: #F1F5F9;
+  background: var(--bg-warm-alt);
   border-radius: 6px;
   overflow: hidden;
 }

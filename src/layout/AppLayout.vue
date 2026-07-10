@@ -72,7 +72,7 @@ onUnmounted(() => {
 .sidebar-mask {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.35);
+  background: rgba(62, 39, 35, 0.35);
   z-index: 99;
 }
 

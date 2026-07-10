@@ -231,9 +231,10 @@ function scrollToBottom() {
 .patient-panel {
   width: 300px;
   flex-shrink: 0;
-  background: #fff;
+  background: var(--surface);
   border-radius: var(--radius-card);
   box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -264,16 +265,16 @@ function scrollToBottom() {
   padding: 14px 16px;
   cursor: pointer;
   transition: background 0.15s;
-  border-bottom: 1px solid #F3F4F6;
+  border-bottom: 1px solid var(--border-light);
 }
 .patient-item:hover {
-  background: #F9FAFB;
+  background: #F5F6F8;
 }
 .patient-item.active {
   background: var(--sidebar-active);
 }
 .patient-avatar {
-  background: #6B7280;
+  background: var(--el-color-primary);
   font-size: 15px;
   flex-shrink: 0;
 }
@@ -308,9 +309,10 @@ function scrollToBottom() {
 /* 聊天面板 */
 .chat-panel {
   flex: 1;
-  background: #fff;
+  background: var(--surface);
   border-radius: var(--radius-card);
   box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -319,7 +321,7 @@ function scrollToBottom() {
 .chat-topbar {
   padding: 14px 20px;
   border-bottom: 1px solid var(--border-light);
-  background: #fff;
+  background: var(--surface);
 }
 .chat-topbar-left {
   display: flex;
@@ -342,7 +344,7 @@ function scrollToBottom() {
   flex: 1;
   overflow-y: auto;
   padding: 20px 24px;
-  background: #F0F2F5;
+  background: #F5F6F8;
 }
 .date-divider {
   text-align: center;
@@ -353,7 +355,7 @@ function scrollToBottom() {
   padding: 4px 12px;
   font-size: 12px;
   color: var(--text-muted);
-  background: rgba(0, 0, 0, 0.06);
+  background: #E8EAED;
   border-radius: 10px;
 }
 .message-item {
@@ -376,16 +378,17 @@ function scrollToBottom() {
   position: relative;
 }
 .message-item:not(.self) .message-bubble {
-  background: #fff;
+  background: var(--surface);
   color: var(--text-regular);
   border-radius: 4px 12px 12px 12px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--shadow-xs);
+  border: 1px solid var(--border-light);
 }
 .message-item.self .message-bubble {
   background: var(--el-color-primary);
   color: #fff;
   border-radius: 12px 4px 12px 12px;
-  box-shadow: 0 1px 2px rgba(22, 119, 255, 0.2);
+  box-shadow: 0 2px 8px rgba(91, 155, 213, 0.25);
 }
 .message-time {
   font-size: 11px;
@@ -411,17 +414,17 @@ function scrollToBottom() {
   justify-content: center;
   gap: 16px;
   color: var(--text-muted);
-  background: #FAFAFA;
+  background: #FAFBFC;
 }
 .no-chat-icon {
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background: #F0F2F5;
+  background: #F1F5F9;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #C0C4CC;
+  color: var(--el-color-primary-light-3);
 }
 .no-chat p {
   font-size: 14px;
@@ -431,7 +434,7 @@ function scrollToBottom() {
 .chat-input-area {
   border-top: 1px solid var(--border-light);
   padding: 16px 20px;
-  background: #fff;
+  background: var(--surface);
 }
 .input-bar {
   display: flex;

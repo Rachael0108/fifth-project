@@ -97,14 +97,14 @@ const patientStats = ref([
 ])
 
 const patients = ref([
-  { id: 1, name: '陈建国', hospitalId: '20240001', phone: '13800001111', gender: '男', age: 45, diagnosis: '肺结核（初治）', category: 'inpatient', nextFollowUp: '2026-07-15', nurse: '王护士', avatarColor: '#6366F1' },
-  { id: 2, name: '王丽华', hospitalId: '20240002', phone: '13800002222', gender: '女', age: 32, diagnosis: 'HIV 感染', category: 'outpatient', nextFollowUp: '2026-07-20', nurse: '张护士', avatarColor: '#F59E0B' },
-  { id: 3, name: '刘志强', hospitalId: '20240003', phone: '13800003333', gender: '男', age: 28, diagnosis: '耐多药结核', category: 'home', nextFollowUp: '2026-07-12', nurse: '李护士', avatarColor: '#10B981' },
-  { id: 4, name: '张秀英', hospitalId: '20240004', phone: '13800004444', gender: '女', age: 55, diagnosis: 'HIV 合并乙肝', category: 'outpatient', nextFollowUp: '2026-07-25', nurse: '刘护士', avatarColor: '#8B5CF6' },
-  { id: 5, name: '李明辉', hospitalId: '20240005', phone: '13800005555', gender: '男', age: 38, diagnosis: '肺结核（复治）', category: 'home', nextFollowUp: '2026-07-18', nurse: '李护士', avatarColor: '#0EA5E9' },
-  { id: 6, name: '赵秀梅', hospitalId: '20240006', phone: '13800006666', gender: '女', age: 51, diagnosis: 'HIV 感染', category: 'inpatient', nextFollowUp: '2026-07-22', nurse: '王护士', avatarColor: '#F43F5E' },
-  { id: 7, name: '孙志伟', hospitalId: '20240007', phone: '13800007777', gender: '男', age: 29, diagnosis: '肺结核（初治）', category: 'home', nextFollowUp: '2026-07-10', nurse: '刘护士', avatarColor: '#0D9488' },
-  { id: 8, name: '吴德明', hospitalId: '20240008', phone: '13800008888', gender: '男', age: 63, diagnosis: '耐多药结核', category: 'closed', nextFollowUp: '-', nurse: '张护士', avatarColor: '#94A3B8' },
+  { id: 1, name: '陈建国', hospitalId: '20240001', phone: '13800001111', gender: '男', age: 45, diagnosis: '肺结核（初治）', category: 'inpatient', nextFollowUp: '2026-07-15', nurse: '王护士', avatarColor: '#7BA7D7' },
+  { id: 2, name: '王丽华', hospitalId: '20240002', phone: '13800002222', gender: '女', age: 32, diagnosis: 'HIV 感染', category: 'outpatient', nextFollowUp: '2026-07-20', nurse: '张护士', avatarColor: '#89CFF0' },
+  { id: 3, name: '刘志强', hospitalId: '20240003', phone: '13800003333', gender: '男', age: 28, diagnosis: '耐多药结核', category: 'home', nextFollowUp: '2026-07-12', nurse: '李护士', avatarColor: '#7EC8B8' },
+  { id: 4, name: '张秀英', hospitalId: '20240004', phone: '13800004444', gender: '女', age: 55, diagnosis: 'HIV 合并乙肝', category: 'outpatient', nextFollowUp: '2026-07-25', nurse: '刘护士', avatarColor: '#B8A9D4' },
+  { id: 5, name: '李明辉', hospitalId: '20240005', phone: '13800005555', gender: '男', age: 38, diagnosis: '肺结核（复治）', category: 'home', nextFollowUp: '2026-07-18', nurse: '李护士', avatarColor: '#F4A896' },
+  { id: 6, name: '赵秀梅', hospitalId: '20240006', phone: '13800006666', gender: '女', age: 51, diagnosis: 'HIV 感染', category: 'inpatient', nextFollowUp: '2026-07-22', nurse: '王护士', avatarColor: '#E899A8' },
+  { id: 7, name: '孙志伟', hospitalId: '20240007', phone: '13800007777', gender: '男', age: 29, diagnosis: '肺结核（初治）', category: 'home', nextFollowUp: '2026-07-10', nurse: '刘护士', avatarColor: '#6BA3D6' },
+  { id: 8, name: '吴德明', hospitalId: '20240008', phone: '13800008888', gender: '男', age: 63, diagnosis: '耐多药结核', category: 'closed', nextFollowUp: '-', nurse: '张护士', avatarColor: '#95C9A8' },
 ])
 
 const categoryMap = {

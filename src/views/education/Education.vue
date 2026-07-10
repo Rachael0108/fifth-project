@@ -241,11 +241,11 @@ const showPreview = ref(false)
 const previewArticleData = ref(null)
 
 const eduStats = ref([
-  { icon: 'Message', label: '健康宣教', count: 4, color: '#1565C0', iconBg: '#E3F2FD' },
-  { icon: 'Reading', label: '知识文章', count: 24, color: '#1565C0', iconBg: '#E3F2FD' },
-  { icon: 'FirstAidKit', label: '结核专区', count: 8, color: '#2E7D32', iconBg: '#E8F5E9' },
-  { icon: 'Star', label: 'HIV 专区', count: 6, color: '#E65100', iconBg: '#FFF3E0' },
-  { icon: 'User', label: '密接者', count: 15, color: '#546E7A', iconBg: '#ECEFF1' },
+  { icon: 'Message', label: '健康宣教', count: 4, color: '#5B9BD5', iconBg: '#E8F2FA' },
+  { icon: 'Reading', label: '知识文章', count: 24, color: '#7BA7D7', iconBg: '#E8F2FA' },
+  { icon: 'FirstAidKit', label: '结核专区', count: 8, color: '#66BB6A', iconBg: '#E8F5E9' },
+  { icon: 'Star', label: 'HIV 专区', count: 6, color: '#FFB300', iconBg: '#FFF8E1' },
+  { icon: 'User', label: '密接者', count: 15, color: '#89CFF0', iconBg: '#E8F2FA' },
 ])
 
 const articles = ref([
@@ -443,18 +443,19 @@ function addContact() {
   gap: 16px;
 }
 .article-card {
-  background: #fff;
+  background: var(--surface);
   border: 1px solid var(--border-light);
   border-radius: var(--radius-card);
   padding: 18px 20px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  transition: box-shadow 0.2s, border-color 0.2s;
+  transition: box-shadow 0.25s, border-color 0.25s, transform 0.25s;
 }
 .article-card:hover {
   border-color: var(--el-color-primary-light-7);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
 }
 .article-tag-row {
   margin-bottom: 10px;

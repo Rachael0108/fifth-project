@@ -301,7 +301,7 @@ const currentDate = ref(new Date())
 const activeTab = ref('daily')
 
 const medStats = ref([
-  { icon: 'FirstAidKit', label: '在管服药患者', value: 78, color: '#0D9488', iconBg: '#CCFBF1' },
+  { icon: 'FirstAidKit', label: '在管服药患者', value: 78, color: '#5B9BD5', iconBg: '#E8F2FA' },
   { icon: 'CircleCheck', label: '今日已打卡', value: 66, color: '#10B981', iconBg: '#D1FAE5' },
   { icon: 'Clock', label: '今日未打卡', value: 12, color: '#F59E0B', iconBg: '#FEF3C7' },
   { icon: 'WarningFilled', label: '连续漏服预警', value: 3, color: '#F43F5E', iconBg: '#FFE4E6' },
@@ -499,12 +499,12 @@ function submitSymptom() {
 }
 
 .mini-bar--cd4 {
-  background: #0D9488;
+  background: #5B9BD5;
   opacity: 0.85;
 }
 
 .mini-bar--viral {
-  background: #94A3B8;
+  background: #89CFF0;
 }
 
 .chart-months {

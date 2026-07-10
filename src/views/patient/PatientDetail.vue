@@ -10,7 +10,7 @@
         <el-card shadow="never" class="section-card profile-card">
           <template #header>
             <div class="profile-header">
-              <el-avatar :size="48" class="profile-avatar">{{ patient.name.charAt(0) }}</el-avatar>
+              <el-avatar :size="48" class="profile-avatar" :style="{ background: patient.avatarColor }">{{ patient.name.charAt(0) }}</el-avatar>
               <div>
                 <div class="profile-name">{{ patient.name }}</div>
                 <div class="profile-id">病历号: {{ patient.hospitalId }}</div>
@@ -40,7 +40,7 @@
           </template>
           <div class="contacts-body">
             <div v-for="c in contacts" :key="c.name" class="contact-row">
-              <el-avatar :size="28">{{ c.name.charAt(1) }}</el-avatar>
+              <el-avatar :size="28" :style="{ background: c.avatarColor }">{{ c.name.charAt(0) }}</el-avatar>
               <div class="contact-info">
                 <span>{{ c.name }}</span>
                 <span class="contact-rel">{{ c.relation }}</span>
@@ -107,22 +107,22 @@ const route = useRoute()
 const loading = ref(false)
 
 const patientMap = {
-  1: { name: '陈建国', hospitalId: '20240001', phone: '13800001111', gender: '男', age: 45, diagnosis: '肺结核（初治）', treatmentPlan: '2HRZE/4HR', nurse: '王护士', doctor: '李医生', nextFollowUp: '2026-07-15', statusLabel: '在治', statusTag: 'danger' },
-  2: { name: '王丽华', hospitalId: '20240002', phone: '13800002222', gender: '女', age: 32, diagnosis: 'HIV 感染', treatmentPlan: 'TDF/3TC/DTG', nurse: '张护士', doctor: '李医生', nextFollowUp: '2026-07-20', statusLabel: '在治', statusTag: 'danger' },
-  3: { name: '刘志强', hospitalId: '20240003', phone: '13800003333', gender: '男', age: 28, diagnosis: '耐多药结核', treatmentPlan: 'Bdq-Lzd-Mfx', nurse: '李护士', doctor: '王医生', nextFollowUp: '2026-07-12', statusLabel: '在治', statusTag: 'danger' },
-  4: { name: '张秀英', hospitalId: '20240004', phone: '13800004444', gender: '女', age: 55, diagnosis: 'HIV 合并乙肝', treatmentPlan: 'TAF/FTC/BIC', nurse: '刘护士', doctor: '李医生', nextFollowUp: '2026-07-25', statusLabel: '在治', statusTag: 'danger' },
-  5: { name: '李明辉', hospitalId: '20240005', phone: '13800005555', gender: '男', age: 38, diagnosis: '肺结核（复治）', treatmentPlan: '2HRZE/4HR', nurse: '李护士', doctor: '王医生', nextFollowUp: '2026-07-18', statusLabel: '在治', statusTag: 'danger' },
-  6: { name: '赵秀梅', hospitalId: '20240006', phone: '13800006666', gender: '女', age: 51, diagnosis: 'HIV 感染', treatmentPlan: 'TDF/3TC/EFV', nurse: '王护士', doctor: '李医生', nextFollowUp: '2026-07-22', statusLabel: '在治', statusTag: 'danger' },
-  7: { name: '孙志伟', hospitalId: '20240007', phone: '13800007777', gender: '男', age: 29, diagnosis: '肺结核（初治）', treatmentPlan: '2HRZE/4HR', nurse: '刘护士', doctor: '王医生', nextFollowUp: '2026-07-10', statusLabel: '在治', statusTag: 'danger' },
-  8: { name: '吴德明', hospitalId: '20240008', phone: '13800008888', gender: '男', age: 63, diagnosis: '耐多药结核', treatmentPlan: 'Bdq-Lzd-Mfx', nurse: '张护士', doctor: '王医生', nextFollowUp: '-', statusLabel: '已结案', statusTag: 'info' },
+  1: { name: '陈建国', hospitalId: '20240001', phone: '13800001111', gender: '男', age: 45, diagnosis: '肺结核（初治）', treatmentPlan: '2HRZE/4HR', nurse: '王护士', doctor: '李医生', nextFollowUp: '2026-07-15', statusLabel: '在治', statusTag: 'danger', avatarColor: '#7BA7D7' },
+  2: { name: '王丽华', hospitalId: '20240002', phone: '13800002222', gender: '女', age: 32, diagnosis: 'HIV 感染', treatmentPlan: 'TDF/3TC/DTG', nurse: '张护士', doctor: '李医生', nextFollowUp: '2026-07-20', statusLabel: '在治', statusTag: 'danger', avatarColor: '#89CFF0' },
+  3: { name: '刘志强', hospitalId: '20240003', phone: '13800003333', gender: '男', age: 28, diagnosis: '耐多药结核', treatmentPlan: 'Bdq-Lzd-Mfx', nurse: '李护士', doctor: '王医生', nextFollowUp: '2026-07-12', statusLabel: '在治', statusTag: 'danger', avatarColor: '#7EC8B8' },
+  4: { name: '张秀英', hospitalId: '20240004', phone: '13800004444', gender: '女', age: 55, diagnosis: 'HIV 合并乙肝', treatmentPlan: 'TAF/FTC/BIC', nurse: '刘护士', doctor: '李医生', nextFollowUp: '2026-07-25', statusLabel: '在治', statusTag: 'danger', avatarColor: '#B8A9D4' },
+  5: { name: '李明辉', hospitalId: '20240005', phone: '13800005555', gender: '男', age: 38, diagnosis: '肺结核（复治）', treatmentPlan: '2HRZE/4HR', nurse: '李护士', doctor: '王医生', nextFollowUp: '2026-07-18', statusLabel: '在治', statusTag: 'danger', avatarColor: '#F4A896' },
+  6: { name: '赵秀梅', hospitalId: '20240006', phone: '13800006666', gender: '女', age: 51, diagnosis: 'HIV 感染', treatmentPlan: 'TDF/3TC/EFV', nurse: '王护士', doctor: '李医生', nextFollowUp: '2026-07-22', statusLabel: '在治', statusTag: 'danger', avatarColor: '#E899A8' },
+  7: { name: '孙志伟', hospitalId: '20240007', phone: '13800007777', gender: '男', age: 29, diagnosis: '肺结核（初治）', treatmentPlan: '2HRZE/4HR', nurse: '刘护士', doctor: '王医生', nextFollowUp: '2026-07-10', statusLabel: '在治', statusTag: 'danger', avatarColor: '#6BA3D6' },
+  8: { name: '吴德明', hospitalId: '20240008', phone: '13800008888', gender: '男', age: 63, diagnosis: '耐多药结核', treatmentPlan: 'Bdq-Lzd-Mfx', nurse: '张护士', doctor: '王医生', nextFollowUp: '-', statusLabel: '已结案', statusTag: 'info', avatarColor: '#95C9A8' },
 }
 
 const patient = computed(() => patientMap[Number(route.params.id)] || patientMap[1])
 
 const contacts = ref([
-  { name: '张妻', relation: '配偶', screeningStatus: 'done' },
-  { name: '张母', relation: '母亲', screeningStatus: 'pending' },
-  { name: '张子', relation: '子女', screeningStatus: 'pending' },
+  { name: '张妻', relation: '配偶', screeningStatus: 'done', avatarColor: '#B8A9D4' },
+  { name: '张母', relation: '母亲', screeningStatus: 'pending', avatarColor: '#F4A896' },
+  { name: '张子', relation: '子女', screeningStatus: 'pending', avatarColor: '#89CFF0' },
 ])
 
 const timeline = ref([
@@ -242,7 +242,6 @@ function goBack() {
   margin-top: 4px;
 }
 .profile-avatar {
-  background: #546E7A;
   font-size: 20px;
 }
 </style>
